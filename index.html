@@ -109,7 +109,7 @@ function planet(parent,r,color,at,ring=false){
  const texture=makePlanetTexture(color,ring);
  const mat=new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:ring?.22:.48,roughness:ring?.72:.91,metalness:.025});
  const p=sphere(parent,r,mat,...at,128);
- const atmosphere=sphere(parent,r*1.035,new THREE.MeshBasicMaterial({color:ring?'#d8c2a0':'#9dcff0',transparent:true,opacity:.075,side:THREE.BackSide,depthWrite:false}),...at,96);
+ const atmosphere=sphere(p,r*1.035,new THREE.MeshBasicMaterial({color:ring?'#d8c2a0':'#9dcff0',transparent:true,opacity:.075,side:THREE.BackSide,depthWrite:false}),0,0,0,96);
  p.userData.atmosphere=atmosphere;
  if(ring){const ringMesh=new THREE.Mesh(new THREE.RingGeometry(r*1.38,r*2.0,192),new THREE.MeshStandardMaterial({color:'#c9b58d',side:THREE.DoubleSide,transparent:true,opacity:.48,roughness:.9}));ringMesh.rotation.x=Math.PI*.37;p.add(ringMesh)}
  return p;
