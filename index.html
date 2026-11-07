@@ -178,6 +178,8 @@ for(let i=12;i<16;i++){
 function setPalette(i){const p=palettes[i%8];nebulaMat.uniforms.uA.value.set(p[0]);nebulaMat.uniforms.uB.value.set(p[1]);nebulaMat.uniforms.uC.value.set(p[2]);scene.fog=new THREE.FogExp2(p[0],.0007)}
 const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();let analyser=null,data=null,masterGain=null;if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;masterGain=audioCtx.createGain();masterGain.gain.value=0;src.connect(analyser);analyser.connect(masterGain);masterGain.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
 let lastSlot=-1,hasStarted=false,lastFrameTime=performance.now();
+// Camera path samples are integrated from the current camera position; never snap to an absolute coordinate.
+let lastCameraPath=null,lastCameraPathTime=null;
 const SHOT_SECONDS=5.35;
 const TOTAL_SHOTS=Math.ceil(262.4/SHOT_SECONDS);
 // Every shot is a place along one continuous flight path, not a replacement cut.
@@ -237,8 +239,26 @@ function animate(){
  if(mode===8){x+=turn*11*env;y+=loop*7*env;zOffset=-20*env;lookY=6*turn*env}
  if(mode===9){x+=Math.sin(3*Math.PI*u)*7*env;y+=Math.sin(2*Math.PI*u)*8*env;zOffset=8*env;roll=-.12*turn*env;lookX=-6*turn*env}
  const z=24-travel+zOffset;
- camera.position.set(x,y,z);
- camera.lookAt(x*.62+lookX+Math.sin(t*.09)*1.1,y*.58+lookY,z-82);
+ // Advance by the change in the path sample, starting from wherever the camera is now.
+ // Large time jumps (tab suspension or timeline seeking) are rate-limited, never applied as teleports.
+ if(lastCameraPath===null){
+  lastCameraPath={x,y,z};
+  lastCameraPathTime=t;
+ }else{
+  const pathDt=t-lastCameraPathTime;
+  const advance=pathDt<=0?0:Math.min(1,.05/pathDt);
+  camera.position.x+=(x-lastCameraPath.x)*advance;
+  camera.position.y+=(y-lastCameraPath.y)*advance;
+  camera.position.z+=(z-lastCameraPath.z)*advance;
+  lastCameraPath={x,y,z};
+  lastCameraPathTime=t;
+ }
+ // Aim relative to the camera's actual current position, not a freshly reset target position.
+ camera.lookAt(
+  camera.position.x*.62+lookX+Math.sin(t*.09)*1.1,
+  camera.position.y*.58+lookY,
+  camera.position.z-82
+ );
  camera.rotateZ(roll);
  const pulse=1+beat*.025;
  g.scale.setScalar(idx===10?pulse+beat*.08:pulse);
