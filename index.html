@@ -54,21 +54,69 @@ if(i===11){points(g,14000,'#d9dfff',.75,220,11);const gal=galaxy(g,.45,4);gal.po
 function setPalette(i){const p=palettes[i%8];nebulaMat.uniforms.uA.value.set(p[0]);nebulaMat.uniforms.uB.value.set(p[1]);nebulaMat.uniforms.uC.value.set(p[2]);scene.fog=new THREE.FogExp2(p[0],.0007)}
 const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();let analyser=null,data=null;if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
 let lastSlot=-1,hasStarted=false;
+const SHOT_SECONDS=5.35;
+const TOTAL_SHOTS=Math.ceil(262.4/SHOT_SECONDS);
+const easeInOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const shotCaptions=[
+'NEBULA — BIRTH OF LIGHT','STAR CLUSTER — A THOUSAND SUNS','ORBIT — WORLDS IN MOTION',
+'SPIRAL GALAXY — THE GREAT WHIRL','COMET — A VISITOR FROM THE DARK','MILKY WAY — RIVER OF STARS',
+'METEOR SHOWER — FALLING LIGHT','BLUE GIANT — A DISTANT WORLD','NEBULA CORE — COLOR IN THE VOID',
+'GALACTIC CROSSING — BETWEEN ISLANDS','SUPERNOVA — THE BRIGHTEST SILENCE','DEEP FIELD — BEYOND THE FRAME'
+];
 function fmt(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0')}
-function animate(){requestAnimationFrame(animate);const t=audio.currentTime||0;const slot=Math.floor(t/5.1),idx=slot%12,local=t%5.1;if(slot!==lastSlot){lastSlot=slot;shots.forEach((g,i)=>g.visible=i===idx);chapter.textContent='COSMIC JOURNEY · '+String(slot+1).padStart(2,'0');caption.textContent=captions[idx];caption.style.opacity=idx===0?0:1;setPalette(idx+slot);camera.fov=idx===6||idx===10?72:62;camera.updateProjectionMatrix()}
-let beat=0;if(analyser){analyser.getByteFrequencyData(data);for(let i=2;i<28;i++)beat+=data[i];beat=beat/(26*255)}
-const transition=smooth(local/.8),end=smooth((5.1-local)/.8);const pulse=1+beat*.12;
-camera.position.x=Math.sin(t*.16)*3+Math.sin(slot*1.7)*1.8;camera.position.y=Math.cos(t*.13)*2.1;camera.position.z=12+Math.sin(t*.1)*3;
-camera.rotation.set(Math.sin(t*.09)*.035,Math.sin(t*.11)*.055,Math.sin(t*.07)*.018);
-const g=shots[idx];g.rotation.y+=.0009+beat*.001;g.rotation.x=Math.sin(t*.08)*.001;
-g.scale.setScalar(pulse);
-nebulaMat.uniforms.uTime.value=t;
-nebula.position.x=Math.sin(t*.018)*18;nebula.position.y=Math.cos(t*.014)*8;nebula.rotation.z=Math.sin(t*.02)*.12;
-key.intensity=130+beat*180;
-if(idx===4){const c=g.children[0];if(c)c.position.x=-18+((local*13)%65)}
-if(idx===6){g.children.forEach((o,i)=>{if(i%3===0)o.position.x+=Math.sin(t*1.6+i)*.04})}
-if(idx===10){g.scale.setScalar(1+beat*.32+Math.pow(Math.max(0,Math.sin(local*1.8)),8)*.16)}
-if(idx===3||idx===5||idx===9){g.rotation.z+=.0015}
+function animate(){
+ requestAnimationFrame(animate);
+ const t=audio.currentTime||0;
+ const slot=Math.min(TOTAL_SHOTS-1,Math.floor(t/SHOT_SECONDS));
+ const idx=(slot*5+Math.floor(slot/12)*3)%12;
+ const local=(t-slot*SHOT_SECONDS)/SHOT_SECONDS;
+ const p=easeInOut(Math.max(0,Math.min(1,local)));
+ if(slot!==lastSlot){
+  lastSlot=slot;
+  shots.forEach((g,i)=>g.visible=i===idx);
+  chapter.textContent='COSMIC JOURNEY · SHOT '+String(slot+1).padStart(2,'0')+' / '+String(TOTAL_SHOTS).padStart(2,'0');
+  caption.textContent=shotCaptions[idx];
+  caption.style.opacity=1;
+  setPalette(idx+slot);
+  camera.fov=[58,64,52,68,56,62][slot%6];
+  camera.updateProjectionMatrix();
+ }
+ let beat=0;
+ if(analyser){analyser.getByteFrequencyData(data);for(let i=2;i<28;i++)beat+=data[i];beat=beat/(26*255)}
+ const g=shots[idx];
+ const seed=slot*1.61803398875;
+ const targetZ=[-65,-5,-42,-2,-35,-8,-12,-45,-40,-60,-40,-70][idx];
+ const distance=([0,3,5,8,9,11].includes(idx)?105:82);
+ const direction=slot%8;
+ const orbit=local*Math.PI*2;
+ let x=0,y=0,z=targetZ+distance;
+ if(direction===0){x=Math.sin(orbit*.5)*10;y=Math.sin(orbit)*4;z=targetZ+distance-42*p}
+ if(direction===1){x=-24+48*p;y=8+Math.sin(orbit)*5;z=targetZ+distance-12*p}
+ if(direction===2){x=Math.cos(orbit)*19;y=Math.sin(orbit)*13;z=targetZ+distance-22*p}
+ if(direction===3){x=12-24*p;y=-12+24*p;z=targetZ+distance-35*p}
+ if(direction===4){x=Math.sin(orbit)*7;y=18-36*p;z=targetZ+distance-18*p}
+ if(direction===5){x=-18+36*p;y=Math.sin(orbit)*8;z=targetZ+distance-50*p}
+ if(direction===6){x=Math.cos(orbit)*24;y=Math.sin(orbit)*15;z=targetZ+distance-30*p}
+ if(direction===7){x=8*Math.sin(orbit);y=4*Math.cos(orbit);z=targetZ+distance-58*p}
+ camera.position.set(x,y,z);
+ camera.lookAt(Math.sin(seed)*3,Math.cos(seed*.7)*2,targetZ);
+ camera.rotation.z+=Math.sin(orbit*.5+seed)*.035;
+ const pulse=1+beat*.045;
+ g.scale.setScalar(pulse);
+ g.rotation.y=Math.sin(seed)*.12+local*(direction%2?-.12:.18)+beat*.04;
+ g.rotation.x=Math.cos(seed*.6)*.08+Math.sin(orbit)*.035;
+ g.rotation.z=Math.sin(seed*.4)*.06+local*.04;
+ nebulaMat.uniforms.uTime.value=t;
+ nebula.position.x=Math.sin(t*.018)*18;
+ nebula.position.y=Math.cos(t*.014)*8;
+ nebula.rotation.z=Math.sin(t*.02)*.12;
+ key.intensity=115+beat*220;
+ if(idx===4){const c=g.children[0];if(c)c.position.x=-32+local*64}
+ if(idx===6){g.children.forEach((o,i)=>{if(i%3===0)o.position.x+=Math.sin(t*1.6+i)*.045})}
+ if(idx===10)g.scale.setScalar(1+beat*.18+Math.pow(Math.max(0,Math.sin(local*Math.PI*2)),10)*.28);
+ if(idx===3||idx===5||idx===9)g.rotation.z+=.003;
+ const cutFade=Math.min(1,local/.08,(1-local)/.08);
+ renderer.domElement.style.opacity=String(.72+.28*Math.max(0,cutFade));
 renderer.render(scene,camera);
 const duration=audio.duration||262.4;bar.style.width=(t/duration*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(duration);
 if(!hasStarted&&t>.5){hasStarted=true;intro.style.opacity=0;loading.style.opacity=0}
