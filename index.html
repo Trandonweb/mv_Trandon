@@ -116,17 +116,28 @@ function planet(parent,r,color,at,ring=false){
 }
 function comet(parent,x,y,z,len=35){
  const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);
- const nucleus=sphere(g,1.35,new THREE.MeshStandardMaterial({color:'#aeb8c2',roughness:1,metalness:.02}),0,0,0,32);
- nucleus.scale.set(1,.78,1.12);
- const coma=sphere(g,2.9,new THREE.MeshBasicMaterial({color:'#d7efff',transparent:true,opacity:.16,blending:THREE.AdditiveBlending,depthWrite:false}),0,0,0,32);
- const ion=new THREE.Mesh(new THREE.ConeGeometry(2.8,len,32,1,true),new THREE.MeshBasicMaterial({color:'#7ecbff',transparent:true,opacity:.27,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
- ion.rotation.x=Math.PI/2;ion.position.z=len*.5;g.add(ion);
- const dust=new THREE.Mesh(new THREE.ConeGeometry(1.65,len*.78,28,1,true),new THREE.MeshBasicMaterial({color:'#ffe3b5',transparent:true,opacity:.24,side:THREE.DoubleSide,depthWrite:false}));
- dust.rotation.x=Math.PI/2;dust.position.z=len*.39;g.add(dust);
- for(let i=0;i<3;i++){
-  const strand=new THREE.Mesh(new THREE.ConeGeometry(.18+ i*.12,len*(.82+i*.08),12,1,true),new THREE.MeshBasicMaterial({color:['#b9e8ff','#d7eaff','#f4d9b5'][i],transparent:true,opacity:.18,side:THREE.DoubleSide,depthWrite:false}));
-  strand.rotation.x=Math.PI/2;strand.position.set((i-1)*.55,0,len*(.42+i*.08));g.add(strand);
- }
+ // Uneven icy nucleus with fractured facets and embedded dark inclusions.
+ const coreGeo=new THREE.IcosahedronGeometry(1.35,4),corePos=coreGeo.attributes.position;
+ for(let i=0;i<corePos.count;i++){const v=new THREE.Vector3().fromBufferAttribute(corePos,i);const n=1+.055*Math.sin(v.x*17+v.y*9)*Math.cos(v.z*13)+.025*Math.sin(v.y*24);corePos.setXYZ(i,v.x*n,v.y*n,v.z*n)}
+ coreGeo.computeVertexNormals();
+ const nucleus=new THREE.Mesh(coreGeo,new THREE.MeshStandardMaterial({color:'#aebbc7',roughness:.94,metalness:.035,flatShading:true}));nucleus.scale.set(1,.78,1.12);g.add(nucleus);
+ for(let i=0;i<11;i++){const a=i*2.399,b=Math.acos(-1+2*(i+.5)/11),r=1.18;const patch=sphere(g,.12+(i%3)*.045,new THREE.MeshStandardMaterial({color:i%2?'#53616d':'#d9e2e8',roughness:1}),Math.sin(b)*Math.cos(a)*r,Math.cos(b)*r,Math.sin(b)*Math.sin(a)*r,10);patch.scale.set(1,.55,1.25)}
+ // Several translucent coma shells create a soft, luminous envelope around the nucleus.
+ sphere(g,2.1,new THREE.MeshBasicMaterial({color:'#b9e6ff',transparent:true,opacity:.11,blending:THREE.AdditiveBlending,depthWrite:false}),0,0,0,40);
+ sphere(g,3.5,new THREE.MeshBasicMaterial({color:'#d8efff',transparent:true,opacity:.055,blending:THREE.AdditiveBlending,depthWrite:false}),0,0,0,40);
+ const makeTail=(points,radius,color,opacity)=>{
+  const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
+  const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,96,radius,10,false),new THREE.MeshBasicMaterial({color,transparent:true,opacity,blending:THREE.AdditiveBlending,depthWrite:false}));
+  g.add(mesh);return mesh;
+ };
+ // A broad, gently curved dust tail plus two narrow ion-stream filaments.
+ makeTail([[0,0,1],[.4,.25,len*.22],[1.7,.8,len*.48],[3.8,1.7,len*.76],[5.8,2.6,len]],1.0,'#f4d6ad',.24);
+ makeTail([[0,0,.8],[-.15,.08,len*.25],[-.5,.25,len*.55],[-1.2,.55,len]],.34,'#8ed6ff',.38);
+ makeTail([[.12,-.08,1],[.5,-.35,len*.28],[1.0,-.8,len*.62],[2.0,-1.2,len]],.16,'#d7edff',.3);
+ // Fine ice and dust grains are embedded along the tail, not just a smooth cone.
+ const count=1150,pos=new Float32Array(count*3),sizes=new Float32Array(count),cols=new Float32Array(count*3),cc=new THREE.Color();
+ for(let i=0;i<count;i++){const t=Math.pow(Math.random(),.72),spread=.18+t*2.4;pos[i*3]=(t*5.8)+(Math.random()-.5)*spread*2;pos[i*3+1]=t*2.6+(Math.random()-.5)*spread;pos[i*3+2]=1+t*(len-1)+(Math.random()-.5)*1.2;sizes[i]=rand(.35,1.35);cc.set(Math.random()>.72?'#b9e5ff':'#f1d9b9');cols[i*3]=cc.r;cols[i*3+1]=cc.g;cols[i*3+2]=cc.b}
+ const grainGeo=new THREE.BufferGeometry();grainGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));grainGeo.setAttribute('aSize',new THREE.BufferAttribute(sizes,1));grainGeo.setAttribute('color',new THREE.BufferAttribute(cols,3));g.add(new THREE.Points(grainGeo,roundStarMaterial({vertexColors:true,opacity:.72})));
  return g;
 }
 function meteor(parent,x,y,z,dx,dy){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);const line=new THREE.Mesh(new THREE.CylinderGeometry(.035,.01,22,6),new THREE.MeshBasicMaterial({color:'#c5e9ff',transparent:true,opacity:.85}));line.position.set(-dx*9,-dy*9,0);line.rotation.z=Math.atan2(dx,dy);g.add(line);sphere(g,.19,new THREE.MeshBasicMaterial({color:'#fff'}),0,0,0,12);return g}
@@ -220,7 +231,7 @@ function animate(){
  // Keep one uninterrupted forward trajectory; the next environment is already visible ahead.
  const startEase=1-Math.exp(-t/2.4);
  const travel=140*(t/SHOT_SECONDS-2.4/SHOT_SECONDS*(1-startEase));
- const u=Math.max(0,Math.min(1,local)),mode=slot%10;
+ const u=Math.max(0,Math.min(1,local)),mode=slot%16;
  // A continuous master trajectory carries the camera through the entire film.
  // Shot-specific moves are small, smooth envelopes layered on top of it.
  let x=Math.sin(t*.012)*10+Math.sin(t*.027)*3.5;
@@ -238,6 +249,13 @@ function animate(){
  if(mode===7){x+=Math.sin(4*Math.PI*u)*6*env;y+=arc*9*env;zOffset=11*env;roll=.09*turn*env}
  if(mode===8){x+=turn*11*env;y+=loop*7*env;zOffset=-20*env;lookY=6*turn*env}
  if(mode===9){x+=Math.sin(3*Math.PI*u)*7*env;y+=Math.sin(2*Math.PI*u)*8*env;zOffset=8*env;roll=-.12*turn*env;lookX=-6*turn*env}
+ // Six additional camera choreographies: corkscrew, vertical crane, orbit, tracking glide, S-curve and dive/reveal.
+ if(mode===10){const a=2*Math.PI*u;x+=Math.cos(a)*10*env;y+=Math.sin(a)*10*env;zOffset=-12*env;roll=.22*arc*env;lookX=-4*Math.sin(a)*env}
+ if(mode===11){x+=Math.sin(Math.PI*u*1.5)*5*env;y+=Math.sin(Math.PI*u)*17*env;zOffset=5*env;lookY=-7*arc*env;roll=.045*turn*env}
+ if(mode===12){const a=2*Math.PI*u;x+=Math.cos(a)*16*env;y+=Math.sin(a)*6*env;zOffset=-5+10*env;lookX=-8*Math.cos(a)*env;lookY=-4*Math.sin(a)*env}
+ if(mode===13){x+=Math.sin(Math.PI*u)*19*env;y+=Math.sin(2*Math.PI*u)*4*env;zOffset=-15*env;lookX=9*arc*env;roll=-.08*turn*env}
+ if(mode===14){x+=Math.sin(2*Math.PI*u)*12*env+Math.sin(4*Math.PI*u)*3*env;y+=Math.sin(3*Math.PI*u)*9*env;zOffset=14*env;roll=.14*Math.sin(2*Math.PI*u)*env;lookY=5*turn*env}
+ if(mode===15){x+=Math.sin(Math.PI*u)*4*env;y+=-Math.sin(Math.PI*u)*13*env;zOffset=-24*env+Math.sin(2*Math.PI*u)*5*env;lookX=7*arc*env;lookY=8*arc*env;roll=.06*turn*env}
  const z=24-travel+zOffset;
  // Advance by the change in the path sample, starting from wherever the camera is now.
  // Large time jumps (tab suspension or timeline seeking) are rate-limited, never applied as teleports.
