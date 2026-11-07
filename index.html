@@ -1,144 +1,84 @@
 <!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050912"><title>BEYOND THE FRAME — A 3D Cinematic</title>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#03030b"><title>BEYOND THE FRAME — COSMIC JOURNEY</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050912;color:#f4eee3;font-family:Inter,Arial,sans-serif}canvas{position:fixed;inset:0;display:block}.veil{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#02050b99 0%,transparent 22%,transparent 72%,#02050bdc 100%)}header{position:fixed;top:26px;left:30px;right:30px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.28em;color:#f3e8d0a8;pointer-events:none}#chapter{max-width:65%;text-align:right}#caption{position:fixed;left:8vw;top:17vh;font-size:10px;letter-spacing:.32em;color:#f5dfb9;text-shadow:0 2px 20px #000;opacity:0;transition:opacity 1s}.controls{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:min(560px,88vw);display:grid;gap:11px}.buttons{display:flex;align-items:center;justify-content:center;gap:25px}button{border:0;background:none;color:#f5f0e7;cursor:pointer}#play{width:42px;height:42px;border:1px solid #ffffff88;border-radius:50%;font-size:14px}.minor{font-size:9px;letter-spacing:.17em;color:#ffffffb0}#seek{height:2px;background:#ffffff4c;cursor:pointer}#bar{height:100%;width:0;background:#e8d2aa;box-shadow:0 0 12px #ffe2b5}.times{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.13em;color:#ffffff9c;font-variant-numeric:tabular-nums}#intro{position:fixed;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;background:radial-gradient(ellipse at center,#101c2a88,transparent 65%);transition:opacity 1.4s}#intro strong{font-size:clamp(35px,8vw,94px);font-weight:200;letter-spacing:.16em;line-height:1.12;text-shadow:0 5px 35px #000}#intro small{display:block;margin-top:22px;font-size:9px;letter-spacing:.5em;color:#e9d4b3}.loading{position:fixed;left:50%;top:55%;transform:translate(-50%,-50%);font-size:9px;letter-spacing:.3em;color:#ffffff88;pointer-events:none;transition:opacity .6s}@media(max-width:600px){header{top:17px;left:16px;right:16px;font-size:8px}.controls{bottom:18px}#caption{top:14vh}}
-</style>
-</head>
-<body>
-<div class="veil"></div><header><span>AN ORIGINAL 3D CINEMATIC</span><span id="chapter">PROLOGUE · THE STILL WORLD</span></header><div id="caption"></div>
-<div id="intro"><div><strong>BEYOND<br>THE FRAME</strong><small>A WORLD WITHOUT EDGES</small></div></div><div class="loading" id="loading">BUILDING THE WORLD</div>
-<div class="controls"><div class="buttons"><button class="minor" id="restart">↺ RESTART</button><button id="play">▶</button><button class="minor" id="mute">SOUND ON</button></div><div id="seek"><div id="bar"></div></div><div class="times"><span id="now">00:00</span><span>BEYOND THE FRAME</span><span id="total">04:22</span></div></div>
-<audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03030b;color:#f3f0ff;font-family:Inter,Arial,sans-serif}canvas{position:fixed;inset:0;display:block}.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#02020a9c,transparent 24%,transparent 76%,#02020ad9)}header{position:fixed;top:25px;left:28px;right:28px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.28em;color:#e7e2ff9c;pointer-events:none}#chapter{max-width:70%;text-align:right}#caption{position:fixed;left:7vw;top:17vh;font-size:10px;letter-spacing:.34em;color:#e5d9ff;text-shadow:0 2px 24px #000;opacity:0;transition:opacity .45s}.controls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);width:min(560px,88vw);display:grid;gap:10px}.buttons{display:flex;align-items:center;justify-content:center;gap:25px}button{border:0;background:none;color:#f5f0ff;cursor:pointer}#play{width:42px;height:42px;border:1px solid #ffffff88;border-radius:50%;font-size:14px}.minor{font-size:9px;letter-spacing:.17em;color:#ffffffad}#seek{height:2px;background:#ffffff40;cursor:pointer}#bar{height:100%;width:0;background:#d8c7ff;box-shadow:0 0 12px #b99cff}.times{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.13em;color:#ffffff91;font-variant-numeric:tabular-nums}#intro{position:fixed;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;background:radial-gradient(ellipse at center,#17112c66,transparent 66%);transition:opacity 1.2s}#intro strong{font-size:clamp(34px,8vw,92px);font-weight:200;letter-spacing:.17em;line-height:1.15;text-shadow:0 5px 38px #000}#intro small{display:block;margin-top:20px;font-size:9px;letter-spacing:.48em;color:#cdbdff}.loading{position:fixed;left:50%;top:56%;transform:translate(-50%,-50%);font-size:9px;letter-spacing:.3em;color:#ffffff80;pointer-events:none}@media(max-width:600px){header{top:17px;left:15px;right:15px;font-size:8px}.controls{bottom:17px}#caption{top:14vh}}
+</style></head><body><div class="shade"></div><header><span>AN ORIGINAL COSMIC JOURNEY</span><span id="chapter">DEEP SPACE · 00</span></header><div id="caption"></div><div id="intro"><div><strong>BEYOND<br>THE FRAME</strong><small>THROUGH THE INFINITE</small></div></div><div class="loading" id="loading">ENTERING DEEP SPACE</div><div class="controls"><div class="buttons"><button class="minor" id="restart">↺ RESTART</button><button id="play">▶</button><button class="minor" id="mute">SOUND ON</button></div><div id="seek"><div id="bar"></div></div><div class="times"><span id="now">00:00</span><span>BEYOND THE FRAME</span><span id="total">04:22</span></div></div><audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
 const audio=document.querySelector('#audio'),playBtn=document.querySelector('#play'),bar=document.querySelector('#bar'),seek=document.querySelector('#seek'),intro=document.querySelector('#intro'),caption=document.querySelector('#caption'),chapter=document.querySelector('#chapter'),loading=document.querySelector('#loading');
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;document.body.prepend(renderer.domElement);
-const scene=new THREE.Scene();scene.background=new THREE.Color('#101b2a');scene.fog=new THREE.FogExp2('#101b2a',.008);
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,1400);camera.position.set(0,5,20);
-scene.add(new THREE.HemisphereLight(0xb9d6f2,0x302a29,1.25));
-const sun=new THREE.DirectionalLight(0xffd6a1,3.2);sun.position.set(-35,55,25);scene.add(sun);
-const fill=new THREE.DirectionalLight(0x9db9dc,1.1);fill.position.set(35,18,-30);scene.add(fill);
-const world=new THREE.Group();scene.add(world);
-const chapters=[
-{t:0,n:'PROLOGUE · THE STILL WORLD',c:'BEFORE THE FIRST STEP, THERE WAS SILENCE.'},
-{t:29,n:'I · THE EDGE OF THE EARTH',c:'THE HORIZON IS ONLY A BEGINNING.'},
-{t:67,n:'II · THE PASSAGE',c:'THE WORLD SLIPS PAST LIKE A DREAM.'},
-{t:111,n:'III · THE GREEN CATHEDRAL',c:'LIFE GROWS WHERE LIGHT CAN REACH.'},
-{t:157,n:'IV · ABOVE THE CLOUDS',c:'SOMEWHERE, THE SKY BECOMES LAND.'},
-{t:207,n:'V · BEYOND THE FRAME',c:'THERE IS MORE ON THE OTHER SIDE.'},
-{t:245,n:'EPILOGUE · THE FIRST LIGHT',c:'NOT AN END. A DIFFERENT BEGINNING.'}
-];
-const groups=[];
-const mat=(color,roughness=.8,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
-const m={deep:mat('#101b25'),rock:mat('#26343b'),sand:mat('#9b8970'),pine:mat('#173b35'),leaf:mat('#285345'),snow:mat('#c6d2d1'),gold:mat('#e7c28b',.32,.55),water:mat('#174b60',.23,.32),dark:mat('#101922'),cloud:mat('#d4dce0',.95),bark:mat('#392d25'),grass:mat('#506d50')};
-function group(){const g=new THREE.Group();world.add(g);groups.push(g);return g}
-function mesh(parent,geo,material,x=0,y=0,z=0){const o=new THREE.Mesh(geo,material);o.position.set(x,y,z);parent.add(o);return o}
-function terrain(parent,size=220,segments=100,fn=(x,z)=>0,material=m.grass){const geo=new THREE.PlaneGeometry(size,size,segments,segments);geo.rotateX(-Math.PI/2);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,fn(x,z))}geo.computeVertexNormals();return mesh(parent,geo,material)}
-function mountain(parent,x,z,sx,sy,sz,seed=1,snow=false){const geo=new THREE.ConeGeometry(1,1,7,5);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);if(y>0)p.setY(i,y*(.82+.18*Math.sin(i*seed*2.7)));p.setX(i,p.getX(i)*(1+.12*Math.sin(i*seed)));}geo.computeVertexNormals();const o=mesh(parent,geo,snow?m.snow:m.rock,x,sy/2,z);o.scale.set(sx,sy,sz);return o}
-function tree(parent,x,z,s=1,variant=0){const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(s);parent.add(g);mesh(g,new THREE.CylinderGeometry(.12,.24,3.5,7),m.bark,0,1.7,0);for(let i=0;i<4;i++){const h=3.1+i*.72;const cone=mesh(g,new THREE.ConeGeometry(1.35-i*.19,2.7,7),variant?m.leaf:m.pine,0,h,0);cone.scale.set(1,1,1)}return g}
-function cloud(parent,x,y,z,s=1){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);for(let i=0;i<6;i++){const o=mesh(g,new THREE.SphereGeometry(1,16,12),m.cloud,(i-2.5)*.9,Math.sin(i*2)*.22,Math.cos(i*1.7)*.35);o.scale.set(1.25,.65,.8);o.material=m.cloud}g.scale.setScalar(s);return g}
-function particles(parent,count,color,size,spread,seed=1){const geo=new THREE.BufferGeometry(),a=new Float32Array(count*3);let st=seed;const rand=()=>{st=(st*1664525+1013904223)>>>0;return st/4294967296};for(let i=0;i<count;i++){a[i*3]=(rand()-.5)*spread;a[i*3+1]=rand()*spread*.55;a[i*3+2]=(rand()-.5)*spread}geo.setAttribute('position',new THREE.BufferAttribute(a,3));const o=new THREE.Points(geo,new THREE.PointsMaterial({color,size,transparent:true,opacity:.75,depthWrite:false}));parent.add(o);return o}
-function sea(parent){const geo=new THREE.PlaneGeometry(700,700,150,150);geo.rotateX(-Math.PI/2);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,Math.sin(x*.055)*.22+Math.cos(z*.047)*.18)}geo.computeVertexNormals();const water=new THREE.MeshPhysicalMaterial({color:'#28657a',metalness:.32,roughness:.22,clearcoat:1,clearcoatRoughness:.1});const o=mesh(parent,geo,water,0,-1,0);o.userData.wave=true;return o}
-// 0: a quiet, monumental coastline at blue hour
-{
- const g=group();g.background='#101b2a';terrain(g,260,110,(x,z)=>-2+Math.sin(x*.025)*1.4+Math.cos(z*.03)*1.2+Math.sin((x+z)*.018)*1.1,m.sand);
- sea(g);for(let i=0;i<9;i++)mountain(g,-115+i*29,-85-(i%3)*22,24+(i%4)*8,35+(i%3)*18,22,1+i,i%3===0);
- const moon=mesh(g,new THREE.SphereGeometry(7,32,24),new THREE.MeshBasicMaterial({color:'#f2d9b2'}),-36,30,-115);const halo=mesh(g,new THREE.SphereGeometry(10,24,16),new THREE.MeshBasicMaterial({color:'#f4d6a1',transparent:true,opacity:.1}),-36,30,-115);
- particles(g,1000,'#c7d9e2',.24,220,3);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;document.body.prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#03030b');
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,2200);camera.position.set(0,0,12);
+const ambient=new THREE.AmbientLight(0x8e9bda,.45);scene.add(ambient);
+const key=new THREE.PointLight(0x9a82ff,160,500);key.position.set(0,0,-50);scene.add(key);
+const root=new THREE.Group();scene.add(root);
+const shots=[];
+const palettes=[
+['#160d35','#4c247e','#d15b9b'],['#061b35','#145b83','#77d8e8'],['#160a32','#6136a5','#e69bc8'],['#08182e','#315e9a','#b8c9ff'],['#240d25','#9b3c65','#f2b57c'],['#071a30','#285e78','#9bd9d5'],['#130c2e','#5b398c','#c2a7ff'],['#081321','#254c72','#d7c7ff']];
+const rand=(a,b)=>a+Math.random()*(b-a);
+function starfield(count=13000,radius=950){const pos=new Float32Array(count*3),colors=new Float32Array(count*3),sizes=new Float32Array(count);const c=new THREE.Color();for(let i=0;i<count;i++){const u=Math.random()*2-1,a=Math.random()*Math.PI*2,d=rand(80,radius),q=Math.sqrt(1-u*u);pos[i*3]=Math.cos(a)*q*d;pos[i*3+1]=u*d;pos[i*3+2]=-Math.abs(Math.sin(a)*q*d)-20;const tint=Math.random();c.set(tint>.94?'#a9caff':tint>.78?'#ffc9a1':'#e5e9ff');colors[i*3]=c.r;colors[i*3+1]=c.g;colors[i*3+2]=c.b;sizes[i]=rand(.6,2.4)}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));const p=new THREE.Points(geo,new THREE.PointsMaterial({size:.95,vertexColors:true,transparent:true,opacity:.9,sizeAttenuation:true}));root.add(p);return p}
+starfield();
+const nebulaMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uTime:{value:0},uA:{value:new THREE.Color('#281052')},uB:{value:new THREE.Color('#a13d9b')},uC:{value:new THREE.Color('#e68c9d')},uOpacity:{value:.72}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;uniform float uTime;uniform vec3 uA,uB,uC;uniform float uOpacity;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.52;for(int i=0;i<6;i++){v+=noise(p)*a;p=p*2.03+vec2(13.1,7.7);a*=.5;}return v;}
+void main(){vec2 p=(vUv-.5)*vec2(1.65,1.0);float n=fbm(p*4.0+vec2(uTime*.012,-uTime*.008));float w=fbm(p*2.3+vec2(n*2.8,-n*1.7));float cloud=smoothstep(.43,.82,w+n*.28);float filament=pow(max(0.,1.-abs(noise(p*19.+n*3.)-.52)*7.),3.)*cloud;vec3 col=mix(uA,uB,smoothstep(.35,.78,n));col=mix(col,uC,smoothstep(.58,.92,w)*.65);col+=uC*filament*.22;float edge=1.-smoothstep(.28,.82,length(p));float alpha=cloud*.66*edge+filament*.16;gl_FragColor=vec4(col,alpha*uOpacity);}`});
+const nebula=new THREE.Mesh(new THREE.PlaneGeometry(180,112),nebulaMat);nebula.position.set(0,0,-190);scene.add(nebula);
+function makeNebula(i){const p=palettes[i%palettes.length];nebulaMat.uniforms.uA.value.set(p[0]);nebulaMat.uniforms.uB.value.set(p[1]);nebulaMat.uniforms.uC.value.set(p[2]);}
+function group(){const g=new THREE.Group();root.add(g);shots.push(g);return g}
+function standard(color,rough=.5,metal=0,emissive=null){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,emissive:emissive||'#000000',emissiveIntensity:.45})}
+function sphere(parent,r,material,x=0,y=0,z=0,detail=48){const o=new THREE.Mesh(new THREE.SphereGeometry(r,detail,Math.max(24,detail/2)),material);o.position.set(x,y,z);parent.add(o);return o}
+function points(parent,n,color,size,spread,seed=1){let s=seed;const R=()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};const a=new Float32Array(n*3);for(let i=0;i<n;i++){a[i*3]=(R()-.5)*spread;a[i*3+1]=(R()-.5)*spread*.65;a[i*3+2]=(R()-.5)*spread}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(a,3));const p=new THREE.Points(geo,new THREE.PointsMaterial({color,size,transparent:true,opacity:.88,depthWrite:false,blending:THREE.AdditiveBlending}));parent.add(p);return p}
+function galaxy(parent,scale=1,arms=3){const g=new THREE.Group();parent.add(g);const n=24000,pos=new Float32Array(n*3),cols=new Float32Array(n*3),color=new THREE.Color();for(let i=0;i<n;i++){const arm=i%arms,rad=Math.pow(Math.random(),.62)*34*scale,ang=arm*Math.PI*2/arms+rad*.19+rand(-.24,.24);const thick=(1-rad/(36*scale))*2.4*scale;pos[i*3]=Math.cos(ang)*rad+rand(-thick,thick);pos[i*3+1]=rand(-thick*.32,thick*.32);pos[i*3+2]=Math.sin(ang)*rad+rand(-thick,thick);const f=Math.random();color.set(f>.88?'#fff0d2':f>.65?'#9fc9ff':f>.32?'#d9a6ff':'#f0b4d5');cols[i*3]=color.r;cols[i*3+1]=color.g;cols[i*3+2]=color.b}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(cols,3));const p=new THREE.Points(geo,new THREE.PointsMaterial({size:.75,vertexColors:true,transparent:true,opacity:.92,blending:THREE.AdditiveBlending,depthWrite:false}));g.add(p);const core=sphere(g,3.2*scale,new THREE.MeshBasicMaterial({color:'#fff1db'}),0,0,0,32);const glow=sphere(g,6*scale,new THREE.MeshBasicMaterial({color:'#e7aaff',transparent:true,opacity:.11,depthWrite:false}),0,0,0,32);return g}
+function planet(parent,r,color,at,ring=false){const mat=standard(color,.78,.02);const p=sphere(parent,r,mat,...at,64);const bump=new THREE.Mesh(new THREE.SphereGeometry(r*1.004,64,48),new THREE.MeshBasicMaterial({color:'#ffffff',wireframe:true,transparent:true,opacity:.018}));p.add(bump);if(ring){const ringMesh=new THREE.Mesh(new THREE.RingGeometry(r*1.35,r*2.05,128),new THREE.MeshStandardMaterial({color:'#d6b98f',side:THREE.DoubleSide,transparent:true,opacity:.62,roughness:.85}));ringMesh.rotation.x=Math.PI*.37;p.add(ringMesh)}return p}
+function comet(parent,x,y,z,len=35){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);sphere(g,1.05,new THREE.MeshBasicMaterial({color:'#fff7df'}),0,0,0,24);const tail=new THREE.Mesh(new THREE.ConeGeometry(2.2,len,20,1,true),new THREE.MeshBasicMaterial({color:'#91d9ff',transparent:true,opacity:.23,side:THREE.DoubleSide,depthWrite:false}));tail.rotation.x=Math.PI/2;tail.position.z=len/2;g.add(tail);const tail2=new THREE.Mesh(new THREE.ConeGeometry(.8,len*.8,16,1,true),new THREE.MeshBasicMaterial({color:'#e9d7ff',transparent:true,opacity:.28,side:THREE.DoubleSide,depthWrite:false}));tail2.rotation.x=Math.PI/2;tail2.position.z=len*.38;g.add(tail2);return g}
+function meteor(parent,x,y,z,dx,dy){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);const line=new THREE.Mesh(new THREE.CylinderGeometry(.035,.01,22,6),new THREE.MeshBasicMaterial({color:'#c5e9ff',transparent:true,opacity:.85}));line.position.set(-dx*9,-dy*9,0);line.rotation.z=Math.atan2(dx,dy);g.add(line);sphere(g,.19,new THREE.MeshBasicMaterial({color:'#fff'}),0,0,0,12);return g}
+function cluster(parent){const g=new THREE.Group();parent.add(g);for(let i=0;i<1300;i++){const u=Math.random()*Math.PI*2,v=Math.acos(rand(-1,1)),r=Math.pow(Math.random(),.7)*23;const x=r*Math.sin(v)*Math.cos(u),y=r*Math.cos(v),z=r*Math.sin(v)*Math.sin(u);const c=Math.random()>.78?'#ffd6a0':Math.random()>.5?'#a9c9ff':'#f4f2ff';sphere(g,rand(.045,.13),new THREE.MeshBasicMaterial({color:c}),x,y,z,8)}return g}
+function ringNebula(parent){const g=new THREE.Group();parent.add(g);for(let i=0;i<9;i++){const ring=new THREE.Mesh(new THREE.TorusGeometry(9+i*2.1,.12+i*.025,8,160),new THREE.MeshBasicMaterial({color:['#a35bff','#4dc9ef','#ed83ca'][i%3],transparent:true,opacity:.18,blending:THREE.AdditiveBlending}));ring.rotation.x=rand(-.5,.5);ring.rotation.y=rand(-.5,.5);g.add(ring)}points(g,3500,'#c8aaff',.28,65,17);return g}
+const types=['NEBULA CLOUDS','STAR CLUSTER','PLANETARY ORBIT','SPIRAL GALAXY','COMET PASSAGE','MILKY WAY','METEOR SHOWER','THE BLUE GIANT','NEBULA CORE','GALACTIC CROSSING','SUPERNOVA LIGHT','DEEP FIELD'];
+const captions=['A CLOUD OF STARS IS BORN.','THOUSANDS OF SUNS, ONE SILENT DANCE.','WORLDS TURN IN THE DARK.','AN ISLAND OF LIGHT IN INFINITE NIGHT.','A VISITOR FROM THE OUTER DARK.','BILLIONS OF STARS, ONE RIVER OF LIGHT.','THE NIGHT BREAKS INTO FIRE.','A BLUE WORLD IN THE VOID.','THE UNIVERSE BREATHES IN COLOR.','DRIFTING BETWEEN GALAXIES.','LIGHT, REBORN FROM THE DARK.','EVERY DISTANCE HIDES A WORLD.'];
+for(let i=0;i<12;i++){const g=group();g.visible=false;makeNebula(i);if(i===0){points(g,8000,'#d9b7ff',.65,110,2);const n=nebula.clone();n.position.set(0,0,-65);n.scale.set(.72,.72,1);g.add(n)}
+if(i===1){cluster(g);points(g,1800,'#c8d9ff',.7,120,3)}
+if(i===2){planet(g,12,'#a85e49',[0,0,-42],true);planet(g,3,'#80a8c6',[25,5,-35]);planet(g,1.6,'#d9b48a',[-23,-9,-30]);points(g,1800,'#d8caff',.55,150,4)}
+if(i===3){const gal=galaxy(g,1.25,4);gal.rotation.x=.75;gal.rotation.z=.22}
+if(i===4){comet(g,-18,8,-35,48);points(g,5000,'#b9d7ff',.7,170,5)}
+if(i===5){const milky=galaxy(g,2.2,5);milky.rotation.x=1.22;milky.rotation.z=.1;milky.scale.set(1.6,.17,1)}
+if(i===6){for(let j=0;j<85;j++)meteor(g,rand(-65,65),rand(-35,35),rand(-70,10),rand(-1,1),rand(-1,1));points(g,6000,'#d8e7ff',.7,170,6)}
+if(i===7){planet(g,19,'#4b92bd',[0,0,-45],false);planet(g,5,'#c8a78c',[32,12,-25]);points(g,3500,'#d8e6ff',.7,160,7)}
+if(i===8){const n=nebula.clone();n.position.set(0,0,-40);n.scale.set(1.6,1.1,1);g.add(n);ringNebula(g)}
+if(i===9){galaxy(g,.82,3).position.set(-20,2,-55);galaxy(g,.58,4).position.set(34,-12,-85);points(g,8000,'#cbdcff',.8,190,9)}
+if(i===10){const burst=new THREE.Group();g.add(burst);for(let j=0;j<160;j++){const a=Math.random()*Math.PI*2,b=Math.acos(rand(-1,1)),r=rand(5,48);const p=sphere(burst,rand(.08,.3),new THREE.MeshBasicMaterial({color:Math.random()>.5?'#fff0ce':'#d8a9ff'}),Math.sin(b)*Math.cos(a)*r,Math.cos(b)*r,Math.sin(b)*Math.sin(a)*r,8)}sphere(g,7,new THREE.MeshBasicMaterial({color:'#fff5dc'}),0,0,-40,32);points(g,6000,'#ffe5c9',1,150,10)}
+if(i===11){points(g,14000,'#d9dfff',.75,220,11);const gal=galaxy(g,.45,4);gal.position.set(36,15,-90)}
 }
-// 1: open sea, black cliffs and a distant sun
-{
- const g=group();terrain(g,300,100,(x,z)=>-5+Math.sin(x*.02)*1.2,m.sand);sea(g);
- for(let i=0;i<7;i++){mountain(g,-130+i*43,-45-(i%2)*35,30,24+(i%3)*13,24,2+i)}
- const sunDisk=mesh(g,new THREE.SphereGeometry(11,32,24),new THREE.MeshBasicMaterial({color:'#ffd5a0'}),48,26,-130);
- for(let i=0;i<5;i++){const cliff=mesh(g,new THREE.DodecahedronGeometry(1,1),m.deep,-95+i*48,8+(i%3)*4,-30-i*9);cliff.scale.set(15,18+i%3*8,11)}
- particles(g,500,'#f8d8a5',.35,180,7);
-}
-// 2: a monumental stone passage through the landscape
-{
- const g=group();terrain(g,220,90,(x,z)=>-2+Math.sin(x*.035)*2+Math.cos(z*.03)*1.4,m.rock);
- for(let i=0;i<10;i++)mountain(g,-125+i*28,-90-(i%4)*16,22,38+(i%3)*16,20,4+i,i%2===0);
- const arch=new THREE.Group();g.add(arch);const stone=mat('#9d8d79',.92);for(const x of [-9,9]){const p=mesh(arch,new THREE.BoxGeometry(2.8,20,3.2),stone,x,10,-35);p.rotation.z=x<0?-.04:.04}
- const top=mesh(arch,new THREE.TorusGeometry(9,1.5,12,64,Math.PI),stone,0,19,-35);top.rotation.z=Math.PI;
- const path=mesh(g,new THREE.PlaneGeometry(18,150),mat('#766c5f'),0,-.5,25);path.rotation.x=-Math.PI/2;
- particles(g,700,'#e5d0a9',.2,130,9);
-}
-// 3: forest cathedral, layers of giant trees and sun shafts
-{
- const g=group();terrain(g,170,90,(x,z)=>-1+Math.sin(x*.07)*.45+Math.cos(z*.06)*.5,m.grass);
- for(let row=0;row<7;row++)for(let i=0;i<13;i++){const x=(i-6)*13+(row%2)*6,z=-75+row*24;if(Math.abs(x)<15&&z>5)continue;tree(g,x,z,.8+(i%4)*.16,(i+row)%2)}
- const path=mesh(g,new THREE.PlaneGeometry(18,180),mat('#7d785c'),0,-.1,12);path.rotation.x=-Math.PI/2;
- const sunBeam=new THREE.SpotLight(0xffe4b4,180,150,Math.PI/5,.8,1.4);sunBeam.position.set(-18,48,-25);sunBeam.target.position.set(0,0,20);g.add(sunBeam,sunBeam.target);
- particles(g,1200,'#d9e6b7',.18,150,11);
-}
-// 4: alpine peaks above a moving cloud sea
-{
- const g=group();terrain(g,260,100,(x,z)=>-6+Math.sin(x*.025)*1.5,m.snow);
- for(let i=0;i<12;i++)mountain(g,-155+i*28,-75-(i%4)*25,25+(i%3)*9,55+(i%4)*22,24,8+i,true);
- for(let i=0;i<30;i++)cloud(g,-180+(i%6)*68,2+Math.floor(i/6)*5,-100+Math.floor(i/6)*40,.7+(i%3)*.25);
- const steps=new THREE.Group();g.add(steps);for(let i=0;i<18;i++){const s=mesh(steps,new THREE.BoxGeometry(7,.65,4),mat('#d6c5a6',.48,.18),-2+i*.65,-2+i*1.2,22-i*7);s.rotation.z=-.04}
- const sunGlow=mesh(g,new THREE.SphereGeometry(9,32,20),new THREE.MeshBasicMaterial({color:'#ffe0ad'}),32,42,-115);
- particles(g,900,'#fff0d3',.3,220,17);
-}
-// 5: the frame, the reveal, and the great crossing
-{
- const g=group();sea(g);terrain(g,280,80,(x,z)=>-7+Math.sin(x*.02)*1.3,m.sand);
- for(let i=0;i<9;i++)mountain(g,-150+i*38,-120-(i%3)*25,34,42+(i%3)*14,30,13+i);
- const portal=new THREE.Group();portal.position.set(0,16,-42);g.add(portal);
- const frameMat=new THREE.MeshStandardMaterial({color:'#e9c991',metalness:.8,roughness:.2,emissive:'#7a4c20',emissiveIntensity:.6});
- const outer=mesh(portal,new THREE.TorusGeometry(15,.8,16,120),frameMat,0,0,0);outer.scale.set(1,1.38,1);
- const inner=mesh(portal,new THREE.TorusGeometry(13,.13,8,100),new THREE.MeshBasicMaterial({color:'#fff0d0'}),0,0,.2);inner.scale.set(1,1.38,1);
- const gate=mesh(portal,new THREE.CircleGeometry(13,80),new THREE.MeshBasicMaterial({color:'#d9a66d',side:THREE.DoubleSide,transparent:true,opacity:.8}),0,0,-.3);gate.scale.y=1.38;
- const glow=mesh(portal,new THREE.CircleGeometry(12,80),new THREE.MeshBasicMaterial({color:'#fff0cf',transparent:true,opacity:.23}),0,0,-.2);glow.scale.y=1.38;
- const rays=new THREE.Group();portal.add(rays);for(let i=0;i<18;i++){const a=i*Math.PI*2/18;const beam=mesh(rays,new THREE.CylinderGeometry(.035,.35,46,6,1,true),new THREE.MeshBasicMaterial({color:'#ffe4b2',transparent:true,opacity:.13,side:THREE.DoubleSide}),Math.cos(a)*18,0,Math.sin(a)*18);beam.rotation.z=Math.PI/2;beam.rotation.y=-a}
- particles(g,2400,'#ffe2b1',.28,150,23);
- g.userData.portal=portal;g.userData.gate=gate;g.userData.glow=glow;
-}
-// 6: calm sunrise, ocean horizon, and an open sky
-{
- const g=group();sea(g);terrain(g,300,80,(x,z)=>-5+Math.sin(x*.018)*1.2,m.sand);
- const sunBall=mesh(g,new THREE.SphereGeometry(10,40,24),new THREE.MeshBasicMaterial({color:'#fff0cf'}),55,30,-150);
- const halo=mesh(g,new THREE.SphereGeometry(18,32,20),new THREE.MeshBasicMaterial({color:'#ffd9a1',transparent:true,opacity:.1}),55,30,-150);
- for(let i=0;i<6;i++)mountain(g,-150+i*60,-115-(i%2)*25,40,25+(i%3)*10,25,20+i);
- particles(g,800,'#fff0d6',.18,220,31);
-}
-const totalDuration=262.4;let active=-1,started=false,analyser=null,data=null;
-const audioCtx=(()=>{try{return new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();
-if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
-function setChapter(t){let n=0;for(let i=0;i<chapters.length;i++)if(t>=chapters[i].t)n=i;if(n!==active){active=n;chapter.textContent=chapters[n].n;caption.textContent=chapters[n].c;caption.style.opacity=n===0?0:1}}
-const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)};
-function animate(){requestAnimationFrame(animate);const t=audio.currentTime||0;setChapter(t);let idx=0;for(let i=0;i<chapters.length;i++)if(t>=chapters[i].t)idx=i;
-groups.forEach((g,i)=>{g.visible=i===idx;});
-const local=t-chapters[idx].t;const beat=(()=>{if(!analyser)return 0;analyser.getByteFrequencyData(data);let s=0;for(let i=2;i<30;i++)s+=data[i];return s/(28*255)})();
-const camPaths=[
-{p:[Math.sin(t*.08)*2,7+Math.sin(t*.13)*.5,34-t*.05],look:[0,4,-40]},
-{p:[-22+t*.48,9+Math.sin(t*.12)*1.2,42-t*.8],look:[0,4,-50]},
-{p:[Math.sin(t*.18)*14,10,48-local*.8],look:[0,9,-30]},
-{p:[Math.sin(t*.09)*20,10+Math.sin(t*.17)*2,45-local*.65],look:[0,8,-25]},
-{p:[-26+local*.65,17+Math.sin(t*.1)*2,45-local*.75],look:[0,16,-45]},
-{p:[-3+Math.sin(local*.09)*5,14+Math.sin(local*.11)*2,70-smooth(local/38)*58],look:[0,17,-42]},
-{p:[0,12,40-local*.22],look:[0,12,-80]}
-][idx];
-let intensity=idx===5?smooth((local-2)/10)*(1-smooth((local-37)/7)):0;
-camera.position.set(camPaths.p[0],camPaths.p[1],camPaths.p[2]);camera.lookAt(...camPaths.look);
-if(idx===5){camera.position.z-=intensity*20;camera.fov=48+intensity*5;camera.updateProjectionMatrix();const p=groups[5].userData.portal;p.rotation.z=Math.sin(t*.7)*.035;p.scale.setScalar(1+intensity*.22+beat*.045);groups[5].userData.gate.material.opacity=.48+intensity*.45;groups[5].userData.glow.material.opacity=.12+intensity*.55;sun.intensity=3.2+intensity*5+beat*2;}else{camera.fov=48;camera.updateProjectionMatrix();sun.intensity=3.2+beat*.4}
-groups[idx].rotation.y=Math.sin(t*.04)*.025;
-groups[idx].children.forEach(o=>{if(o.userData.wave&&o.geometry.attributes.position){const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,-1+Math.sin(x*.055+t*.8)*.25+Math.cos(z*.047+t*.7)*.2)}p.needsUpdate=true;o.geometry.computeVertexNormals()}});
+function setPalette(i){const p=palettes[i%8];nebulaMat.uniforms.uA.value.set(p[0]);nebulaMat.uniforms.uB.value.set(p[1]);nebulaMat.uniforms.uC.value.set(p[2]);scene.fog=new THREE.FogExp2(p[0],.0007)}
+const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();let analyser=null,data=null;if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
+let lastSlot=-1,hasStarted=false;
+function fmt(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0')}
+function animate(){requestAnimationFrame(animate);const t=audio.currentTime||0;const slot=Math.floor(t/5.1),idx=slot%12,local=t%5.1;if(slot!==lastSlot){lastSlot=slot;shots.forEach((g,i)=>g.visible=i===idx);chapter.textContent='COSMIC JOURNEY · '+String(slot+1).padStart(2,'0');caption.textContent=captions[idx];caption.style.opacity=idx===0?0:1;setPalette(idx+slot);camera.fov=idx===6||idx===10?72:62;camera.updateProjectionMatrix()}
+let beat=0;if(analyser){analyser.getByteFrequencyData(data);for(let i=2;i<28;i++)beat+=data[i];beat=beat/(26*255)}
+const transition=smooth(local/.8),end=smooth((5.1-local)/.8);const pulse=1+beat*.12;
+camera.position.x=Math.sin(t*.16)*3+Math.sin(slot*1.7)*1.8;camera.position.y=Math.cos(t*.13)*2.1;camera.position.z=12-(t*.65%95);
+camera.rotation.set(Math.sin(t*.09)*.035,Math.sin(t*.11)*.055,Math.sin(t*.07)*.018);
+const g=shots[idx];g.rotation.y+=.0009+beat*.001;g.rotation.x=Math.sin(t*.08)*.001;
+g.scale.setScalar(pulse);
+nebulaMat.uniforms.uTime.value=t;
+nebula.position.x=Math.sin(t*.018)*18;nebula.position.y=Math.cos(t*.014)*8;nebula.rotation.z=Math.sin(t*.02)*.12;
+key.intensity=130+beat*180;
+if(idx===4){const c=g.children[0];if(c)c.position.x=-18+((local*13)%65)}
+if(idx===6){g.children.forEach((o,i)=>{if(i%3===0)o.position.x+=Math.sin(t*1.6+i)*.04})}
+if(idx===10){g.scale.setScalar(1+beat*.32+Math.pow(Math.max(0,Math.sin(local*1.8)),8)*.16)}
+if(idx===3||idx===5||idx===9){g.rotation.z+=.0015}
 renderer.render(scene,camera);
-bar.style.width=(t/(audio.duration||totalDuration)*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(audio.duration||totalDuration);
-if(!started&&t>1){started=true;intro.style.opacity=0;loading.style.opacity=0}
+const duration=audio.duration||262.4;bar.style.width=(t/duration*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(duration);
+if(!hasStarted&&t>.5){hasStarted=true;intro.style.opacity=0;loading.style.opacity=0}
 }
-const fmt=t=>String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0');
-playBtn.onclick=async()=>{if(audio.paused){try{if(audioCtx?.state==='suspended')await audioCtx.resume();await audio.play();intro.style.opacity=0;playBtn.textContent='Ⅱ'}catch(e){loading.textContent='TAP PLAY TO BEGIN';loading.style.opacity=1}}else{audio.pause();playBtn.textContent='▶'}};
-audio.onplay=()=>{playBtn.textContent='Ⅱ';intro.style.opacity=0;loading.style.opacity=0};audio.onpause=()=>playBtn.textContent='▶';audio.onended=()=>{intro.style.opacity=1;intro.querySelector('small').textContent='THE WORLD IS STILL OPEN'};
+playBtn.onclick=async()=>{if(audio.paused){try{if(audioCtx?.state==='suspended')await audioCtx.resume();await audio.play();intro.style.opacity=0;loading.style.opacity=0;playBtn.textContent='Ⅱ'}catch(e){loading.textContent='TAP PLAY TO BEGIN';loading.style.opacity=1}}else{audio.pause();playBtn.textContent='▶'}};
+audio.onplay=()=>{playBtn.textContent='Ⅱ';intro.style.opacity=0;loading.style.opacity=0};audio.onpause=()=>playBtn.textContent='▶';audio.onended=()=>{intro.style.opacity=1;intro.querySelector('small').textContent='THE UNIVERSE HAS NO EDGE'};
 document.querySelector('#restart').onclick=()=>{audio.currentTime=0;if(audio.paused)playBtn.click()};
 document.querySelector('#mute').onclick=e=>{audio.muted=!audio.muted;e.target.textContent=audio.muted?'SOUND OFF':'SOUND ON'};
-seek.onclick=e=>{const r=seek.getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(audio.duration||totalDuration)};
+seek.onclick=e=>{const r=seek.getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(audio.duration||262.4)};
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();playBtn.click()}});
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
 animate();loading.style.opacity=0;
 </script></body></html>
