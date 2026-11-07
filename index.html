@@ -139,7 +139,6 @@ function animate(){
  bloomPass.strength=1.05+beat*.48+(idx===10?.65:0);
  bloomPass.radius=.72;
  bloomPass.threshold=idx===10?.12:.2;
- routeShots.forEach((o,i)=>{if(i!==slot)o.rotation.y+=.000035;});
  composer.render();
 const duration=audio.duration||262.4;bar.style.width=(t/duration*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(duration);
 if(!hasStarted&&t>.5){hasStarted=true;intro.style.opacity=0;loading.style.opacity=0}
