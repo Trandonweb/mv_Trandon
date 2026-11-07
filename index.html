@@ -79,7 +79,7 @@ if(i===10){const burst=new THREE.Group();g.add(burst);for(let j=0;j<160;j++){con
 if(i===11){points(g,14000,'#d9dfff',.75,220,11);const gal=galaxy(g,.45,4);gal.position.set(36,15,-90)}
 }
 for(let i=12;i<16;i++){
- const g=group();
+ const g=group();g.visible=false;
  if(i===12){
   sphere(g,9,new THREE.MeshBasicMaterial({color:'#020107'}),0,0,-42,64);
   const d1=new THREE.Mesh(new THREE.TorusGeometry(17,2.4,18,180),new THREE.MeshBasicMaterial({color:'#ff9a54',transparent:true,opacity:.86,blending:THREE.AdditiveBlending}));
