@@ -1,103 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080910">
-<meta name="description" content="Beyond the Frame — an audiovisual journey through the edge of the visible world.">
-<title>BEYOND THE FRAME — Music Film</title>
-<style>
-:root{color-scheme:dark;--ink:#080910;--white:#f3f1ec;--muted:#a6a7b3;--line:#ffffff24}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--white)}
-body{min-height:100svh}canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#05060a99 0%,transparent 24%,transparent 66%,#05060bd9 100%),radial-gradient(ellipse at center,transparent 35%,#02030980 100%)}
-.frame{position:fixed;inset:0;pointer-events:none;border:1px solid #ffffff13}
-.top{position:fixed;top:clamp(20px,4vw,48px);left:clamp(20px,5vw,68px);right:clamp(20px,5vw,68px);display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
-.brand{font-size:10px;letter-spacing:.28em;color:#ffffff9c;font-weight:650}.chapter{font-size:10px;letter-spacing:.2em;color:#ffffff70;text-align:right}
-.center-copy{position:fixed;left:50%;top:47%;transform:translate(-50%,-50%);width:min(90vw,1000px);text-align:center;pointer-events:none;text-shadow:0 4px 40px #000}
-.kicker{font-size:clamp(9px,1vw,12px);letter-spacing:.48em;text-transform:uppercase;color:#e8d8c0b0;margin-bottom:22px}
-h1{font-size:clamp(42px,9.2vw,124px);font-weight:300;letter-spacing:.105em;line-height:.98;margin:0 0 18px;padding-left:.105em}
-.sub{font-size:clamp(9px,1.15vw,13px);letter-spacing:.36em;color:#ffffffa3;text-transform:uppercase}
-.bottom{position:fixed;left:clamp(20px,5vw,68px);right:clamp(20px,5vw,68px);bottom:clamp(18px,4vh,42px);display:grid;grid-template-columns:1fr minmax(170px,440px) 1fr;align-items:end;gap:22px}
-.note{font-size:9px;letter-spacing:.22em;color:#ffffff72;text-transform:uppercase;line-height:1.8}
-.controls{display:flex;flex-direction:column;gap:12px;align-items:stretch}
-.transport{display:flex;justify-content:center;align-items:center;gap:18px}
-button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer}
-.play{width:46px;height:46px;border:1px solid #ffffff66;border-radius:50%;display:grid;place-items:center;transition:.25s;background:#ffffff0a;backdrop-filter:blur(12px)}
-.play:hover{background:#ffffff20;border-color:#fff;transform:scale(1.05)}
-.minor{font-size:9px;letter-spacing:.18em;color:#ffffff9c;text-transform:uppercase;padding:9px 4px}
-.track{height:2px;background:#ffffff35;position:relative;cursor:pointer;touch-action:pan-y}
-.progress{height:100%;width:0;background:#e7d7bc;box-shadow:0 0 12px #e7d7bc;pointer-events:none}
-.times{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;font-size:9px;letter-spacing:.12em;color:#ffffff80}
-.right-note{text-align:right}
-.hint{position:fixed;left:50%;bottom:115px;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;color:#ffffff65;text-transform:uppercase;white-space:nowrap;transition:opacity 1s}
-@media(max-width:620px){.bottom{grid-template-columns:1fr;gap:12px;bottom:20px}.note{display:none}.controls{width:min(84vw,420px);margin:auto}.center-copy{top:43%}.chapter{max-width:42%;line-height:1.7}.hint{bottom:112px}}
-@media(prefers-reduced-motion:reduce){.play:hover{transform:none}}
-</style>
-</head>
-<body>
-<canvas id="film" aria-label="Abstract animated music film"></canvas>
-<div class="shade"></div><div class="frame"></div>
-<header class="top"><div class="brand">AN ORIGINAL MUSIC FILM&nbsp; / &nbsp;01</div><div class="chapter" id="chapter">THE THRESHOLD&nbsp; — &nbsp;00:00</div></header>
-<main class="center-copy" id="titleCard"><div class="kicker">A JOURNEY OUTSIDE THE KNOWN</div><h1>BEYOND<br>THE FRAME</h1><div class="sub">LOOK CLOSER. GO FURTHER.</div></main>
-<div class="hint" id="hint">PRESS PLAY TO ENTER</div>
-<section class="bottom" aria-label="Music controls">
-<div class="note">A WORLD IS ONLY<br>AS SMALL AS ITS FRAME.</div>
-<div class="controls">
-<div class="transport">
-<button class="minor" id="restart" aria-label="Restart">↺</button>
-<button class="play" id="play" aria-label="Play"><svg id="playIcon" width="13" height="15" viewBox="0 0 13 15" fill="none"><path d="M1 1.2L12 7.5L1 13.8V1.2Z" fill="currentColor"/></svg></button>
-<button class="minor" id="mute" aria-label="Mute audio">SOUND ON</button>
-</div>
-<div class="track" id="track" role="slider" aria-label="Seek music" aria-valuemin="0" aria-valuemax="262" aria-valuenow="0" tabindex="0"><div class="progress" id="progress"></div></div>
-<div class="times"><span id="elapsed">00:00</span><span>BEYOND THE FRAME</span><span id="duration">04:22</span></div>
-</div>
-<div class="note right-note">AN OPENING<br>INTO THE INFINITE.</div>
-</section>
-<audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b12"><title>BEYOND THE FRAME — Music Video</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12;color:#f5f0e7;font-family:Arial,sans-serif}canvas{position:fixed;inset:0;width:100%;height:100%}.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#03060b88,transparent 25%,transparent 70%,#03060bdc)}header{position:fixed;top:24px;left:28px;right:28px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.24em;color:#eee0c899;pointer-events:none}#chapter{max-width:60%;text-align:right}#caption{position:fixed;top:15%;left:8%;font-size:10px;letter-spacing:.32em;color:#f5dfb9;text-shadow:0 2px 18px #000;opacity:0;transition:opacity 1s}.controls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);width:min(540px,88vw);display:grid;gap:10px}.buttons{display:flex;align-items:center;justify-content:center;gap:24px}button{border:0;background:transparent;color:#f5f0e7;cursor:pointer}#play{width:42px;height:42px;border:1px solid #ffffff88;border-radius:50%}.minor{font-size:10px;letter-spacing:.15em;color:#ffffffaa}#seek{height:3px;background:#ffffff55;cursor:pointer}#bar{height:100%;width:0;background:#e9d4ae}.times{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.12em;color:#ffffffaa;font-variant-numeric:tabular-nums}#title{position:fixed;inset:0;display:grid;place-items:center;background:#080b12;transition:opacity 1.3s;pointer-events:none;text-align:center}#title strong{font-size:clamp(38px,8vw,92px);font-weight:300;letter-spacing:.13em}#title small{display:block;margin-top:18px;letter-spacing:.4em;color:#e7d2ad}@media(max-width:600px){header{top:17px;left:16px;right:16px;font-size:8px}.controls{bottom:17px}}
+</style></head><body><canvas id="c"></canvas><div class="shade"></div><header><span>AN ORIGINAL MUSIC VIDEO</span><span id="chapter">PROLOGUE · THE ROOM</span></header><div id="caption"></div><div id="title"><div><strong>BEYOND<br>THE FRAME</strong><small>A STORY IN MOTION</small></div></div><div class="controls"><div class="buttons"><button class="minor" id="restart">↺ RESTART</button><button id="play">▶</button><button class="minor" id="mute">SOUND ON</button></div><div id="seek"><div id="bar"></div></div><div class="times"><span id="now">00:00</span><span>BEYOND THE FRAME</span><span id="total">04:22</span></div></div><audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
 <script>
-(()=>{
-const canvas=document.getElementById('film'),ctx=canvas.getContext('2d',{alpha:false});
-const audio=document.getElementById('audio'),play=document.getElementById('play'),playIcon=document.getElementById('playIcon');
-const progress=document.getElementById('progress'),track=document.getElementById('track'),elapsed=document.getElementById('elapsed'),duration=document.getElementById('duration');
-const chapter=document.getElementById('chapter'),hint=document.getElementById('hint'),mute=document.getElementById('mute');
-let W=0,H=0,DPR=1,analyser=null,data=null,audioCtx=null,playing=false,last=0,beat=0,particles=[],stars=[];
-const TAU=Math.PI*2,clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
-const fmt=t=>{t=Math.max(0,Math.floor(t||0));return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')};
-function resize(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);stars=Array.from({length:Math.round(W*H/5000)},()=>({x:Math.random()*W,y:Math.random()*H,z:Math.random(),p:Math.random()*TAU}));}
-addEventListener('resize',resize);resize();
-function initAudio(){if(audioCtx)return;audioCtx=new (window.AudioContext||window.webkitAudioContext)();const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;analyser.smoothingTimeConstant=.82;data=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);analyser.connect(audioCtx.destination);}
-function amp(){if(!analyser||!data)return 0;analyser.getByteFrequencyData(data);let s=0;for(let i=2;i<18;i++)s+=data[i];return s/(16*255);}
-function playState(on){playing=on;play.setAttribute('aria-label',on?'Pause':'Play');playIcon.innerHTML=on?'<path d="M2 1H5V14H2zM8 1H11V14H8z" fill="currentColor"/>':'<path d="M1 1.2L12 7.5L1 13.8V1.2Z" fill="currentColor"/>';hint.style.opacity=on?'0':'1';}
-async function toggle(){if(!audioCtx)initAudio();if(audioCtx.state==='suspended')await audioCtx.resume();if(audio.paused){try{await audio.play();playState(true)}catch(e){hint.textContent='AUDIO COULD NOT START — TAP PLAY AGAIN'}}else{audio.pause();playState(false)}}
-play.addEventListener('click',toggle);audio.addEventListener('play',()=>playState(true));audio.addEventListener('pause',()=>playState(false));audio.addEventListener('ended',()=>playState(false));
-document.getElementById('restart').addEventListener('click',()=>{audio.currentTime=0;if(audio.paused)toggle()});
-mute.addEventListener('click',()=>{audio.muted=!audio.muted;mute.textContent=audio.muted?'SOUND OFF':'SOUND ON'});
-function seek(e){const r=track.getBoundingClientRect();audio.currentTime=clamp((e.clientX-r.left)/r.width)* (audio.duration||262.4)}
-track.addEventListener('click',seek);track.addEventListener('keydown',e=>{if(e.key==='ArrowRight')audio.currentTime=Math.min(audio.duration||262.4,audio.currentTime+5);if(e.key==='ArrowLeft')audio.currentTime=Math.max(0,audio.currentTime-5)});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&!['BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();toggle()}});
-document.addEventListener('dblclick',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()});
-const scenes=[
-{at:0,name:'THE THRESHOLD'},{at:34,name:'A FRACTURE IN TIME'},{at:82,name:'THE UNSEEN EXPANDS'},{at:132,name:'BETWEEN WORLDS'},{at:184,name:'BEYOND THE FRAME'},{at:232,name:'THE AFTERLIGHT'}
-];
-function sceneAt(t){let i=0;for(let j=0;j<scenes.length;j++)if(t>=scenes[j].at)i=j;return i}
-function background(t,a){const s=sceneAt(t),hue=[222,252,192,28,205,38][s];let g=ctx.createRadialGradient(W*.5,H*.47,0,W*.5,H*.5,Math.max(W,H)*.78);g.addColorStop(0,`hsla(${hue},42%,${mix(12,19,a*.7)}%,1)`);g.addColorStop(.55,`hsla(${hue+12},35%,8%,1)`);g.addColorStop(1,'#03040a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-ctx.save();ctx.globalAlpha=.34;for(const st of stars){let tw=.3+.7*(.5+.5*Math.sin(t*.7+st.p));ctx.fillStyle='#e7e5df';ctx.globalAlpha=st.z*.55*tw;ctx.beginPath();ctx.arc(st.x,st.y,st.z*1.25,0,TAU);ctx.fill()}ctx.restore();}
-function portal(t,a){const s=sceneAt(t),cx=W*.5,cy=H*.49,scale=Math.min(W,H)*.0015,open=clamp((t-2)/12),pulse=1+a*.12;
-ctx.save();ctx.translate(cx,cy);ctx.rotate(Math.sin(t*.13)*.025);for(let k=7;k>=0;k--){const r=(65+k*28+Math.sin(t*.55+k)*5)*scale*pulse*(.35+.65*open);ctx.beginPath();ctx.ellipse(0,0,r*1.2,r*1.72,0,0,TAU);ctx.strokeStyle=`rgba(${k%2?177:226},${k%2?194:178},${k%2?235:140},${.045+k*.008+a*.035})`;ctx.lineWidth=(k===0?2:1)*scale*1.4;ctx.shadowBlur=20*scale;ctx.shadowColor='#b9c9ef';ctx.stroke();}
-const core=ctx.createRadialGradient(0,0,0,0,0,145*scale*pulse);core.addColorStop(0,'#e8e2d4');core.addColorStop(.12,'#b5c7df88');core.addColorStop(1,'#8ca4d000');ctx.fillStyle=core;ctx.beginPath();ctx.arc(0,0,145*scale*pulse,0,TAU);ctx.fill();ctx.restore();}
-function shards(t,a){const count=sceneAt(t)<2?18:38;ctx.save();for(let i=0;i<count;i++){const seed=i*91.73,ang=seed%TAU+t*(.025+(i%5)*.003),rad=(.16+(i%9)*.065)*Math.min(W,H)*(1+Math.sin(t*.3+i)*.08);const x=W/2+Math.cos(ang)*rad,y=H/2+Math.sin(ang*1.13)*rad*.68;ctx.save();ctx.translate(x,y);ctx.rotate(ang+t*.05);ctx.strokeStyle=`rgba(211,220,235,${.07+(i%4)*.025+a*.08})`;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(-8-(i%4)*4,-22);ctx.lineTo(0,0);ctx.lineTo(7+(i%3)*5,25);ctx.stroke();ctx.restore()}ctx.restore();}
-function horizon(t,a){const s=sceneAt(t),y=H*.68+Math.sin(t*.25)*H*.015;ctx.save();const glow=ctx.createLinearGradient(0,y-90,0,y+100);glow.addColorStop(0,'#b9c8e000');glow.addColorStop(.5,`rgba(178,194,221,${.10+a*.12})`);glow.addColorStop(1,'#7184a000');ctx.fillStyle=glow;ctx.fillRect(0,y-100,W,220);
-ctx.strokeStyle='#c8d5e733';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
-for(let i=0;i<18;i++){let z=(i+1)/18,yy=y+z*z*H*.28;ctx.globalAlpha=(1-z)*.22;ctx.beginPath();ctx.moveTo(W*.5,yy);ctx.lineTo(0,yy+z*14);ctx.moveTo(W*.5,yy);ctx.lineTo(W,yy+z*14);ctx.stroke()}ctx.restore();}
-function rays(t,a){ctx.save();ctx.translate(W/2,H/2);for(let i=0;i<24;i++){const ang=i*TAU/24+t*.018,len=Math.max(W,H)*(.25+(i%5)*.12)*(1+a*.25);ctx.strokeStyle=`rgba(208,218,236,${.025+a*.035})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(Math.cos(ang)*70,Math.sin(ang)*70);ctx.lineTo(Math.cos(ang)*len,Math.sin(ang)*len);ctx.stroke()}ctx.restore();}
-function finale(t,a){const p=clamp((t-225)/37);ctx.save();ctx.globalAlpha=p;ctx.fillStyle='#e7ddca';ctx.textAlign='center';ctx.font=`300 ${Math.max(15,Math.min(22,W*.022))}px system-ui`;ctx.letterSpacing='0.45em';ctx.fillText('THE WORLD DOES NOT END AT THE EDGE.',W/2,H*.83);ctx.restore();}
-function draw(now){const t=audio.currentTime||0,a=amp();beat=mix(beat,a,.18);background(t,beat);const s=sceneAt(t);if(s>=1)shards(t,beat);if(s>=2)horizon(t,beat);if(s>=3)rays(t,beat);portal(t,beat);if(s>=4)finale(t,beat);
-const sc=scenes[s];chapter.textContent=sc.name+'  —  '+fmt(t);progress.style.width=((t/(audio.duration||262.4))*100)+'%';elapsed.textContent=fmt(t);duration.textContent=fmt(audio.duration||262.4);track.setAttribute('aria-valuenow',Math.floor(t));
-if(t>2&&hint.style.opacity!=='0')hint.style.opacity='0';
-requestAnimationFrame(draw)}
-requestAnimationFrame(draw);
+(()=>{const c=document.querySelector('#c'),g=c.getContext('2d'),a=document.querySelector('#audio'),play=document.querySelector('#play'),bar=document.querySelector('#bar'),seek=document.querySelector('#seek'),caption=document.querySelector('#caption'),chapter=document.querySelector('#chapter'),title=document.querySelector('#title');let W,H,D,scene=-1;const PI=Math.PI,cl=v=>Math.max(0,Math.min(1,v)),sm=v=>{v=cl(v);return v*v*(3-2*v)},mix=(a,b,t)=>a+(b-a)*t,fmt=t=>String(t/60|0).padStart(2,'0')+':'+String(t%60|0).padStart(2,'0');
+const cuts=[{t:0,n:'PROLOGUE · THE ROOM',c:'SOMEWHERE, SOMETHING IS WAITING.'},{t:29,n:'I · THE FIRST DOOR',c:'THE WORLD BEGINS TO MOVE.'},{t:67,n:'II · THE LAST TRAIN',c:'EVERY WINDOW HOLDS ANOTHER LIFE.'},{t:111,n:'III · THE WILD',c:'FOLLOW WHAT YOU CANNOT NAME.'},{t:157,n:'IV · ABOVE THE CLOUDS',c:'THE DISTANCE WAS NEVER THE END.'},{t:207,n:'V · BEYOND THE FRAME',c:'STEP INTO THE UNWRITTEN.'},{t:245,n:'EPILOGUE · MORNING',c:'AND THE WORLD OPENS AGAIN.'}];
+function resize(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;g.setTransform(D,0,0,D,0,0)}addEventListener('resize',resize);resize();
+function bg(a,b){let z=g.createLinearGradient(0,0,0,H);z.addColorStop(0,a);z.addColorStop(1,b);g.fillStyle=z;g.fillRect(0,0,W,H)}
+function poly(p,col){g.fillStyle=col;g.beginPath();p.forEach((v,i)=>i?g.lineTo(...v):g.moveTo(...v));g.closePath();g.fill()}
+function line(x,y,X,Y,col='#fff',w=1){g.strokeStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x,y);g.lineTo(X,Y);g.stroke()}
+function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,PI*2);g.fill()}
+function person(x,y,s,step=0,col='#080d13'){g.save();g.translate(x,y);g.scale(s,s);dot(0,-44,8,col);poly([[-8,-34],[8,-34],[12,-5],[6,0],[-7,0],[-12,-5]],col);line(-5,-5,-8+Math.sin(step)*6,18,col,5);line(5,-5,8-Math.sin(step)*6,18,col,5);line(-8,-28,-16+Math.sin(step)*4,-8,col,4);line(8,-28,16-Math.sin(step)*4,-8,col,4);g.restore()}
+function room(t){bg('#111b2b','#27232a');let f=H*.76;g.fillStyle='#080f1b';g.fillRect(W*.59,H*.13,W*.29,H*.52);for(let i=0;i<8;i++){let x=W*(.60+i*.034),h=H*(.12+(i%5)*.04);g.fillStyle='#101d29';g.fillRect(x,f-h,W*.026,h);for(let j=0;j<3;j++)dot(x+8+j*9,f-h+16+j*19,2,'#d7b98a66')}g.fillStyle='#080d16';g.fillRect(W*.58,H*.1,6,H*.56);g.fillRect(W*.88,H*.1,6,H*.56);g.fillRect(W*.72,H*.1,4,H*.56);g.fillStyle='#302d30';g.fillRect(W*.08,f,W*.84,H*.23);line(W*.28,f-3,W*.31,H*.49,'#a48f74',5);line(W*.31,H*.49,W*.4,H*.45,'#a48f74',4);poly([[W*.37,H*.43],[W*.45,H*.43],[W*.42,H*.48],[W*.39,H*.48]],'#d6b887');person(W*.49,f,Math.min(W,H)/580,Math.sin(t)*.2);g.fillStyle='#bca77f';g.fillRect(W*.45,H*.68,W*.065,H*.055);let q=sm((t-17)/10);g.save();g.globalAlpha=q;line(W*.18,H*.12,W*.21,H*.29,'#ffe0a5',2);line(W*.21,H*.29,W*.17,H*.42,'#ffe0a5',2);line(W*.21,H*.29,W*.27,H*.37,'#ffe0a5',1);let z=g.createRadialGradient(W*.2,H*.29,0,W*.2,H*.29,180);z.addColorStop(0,'#ffe1a888');z.addColorStop(1,'#ffe1a800');g.fillStyle=z;g.fillRect(0,0,W,H);g.restore()}
+function city(t){bg('#18283b','#d18b67');let h=H*.67;for(let l=0;l<3;l++)for(let i=-1;i<13;i++){let bw=W/10,x=i*bw-(t*[.12,.3,.6][l]*55%(bw)),bh=H*(.16+((i*7+l*3+30)%7)*.045);g.fillStyle=['#1b2935','#17232e','#111b27'][l];g.fillRect(x,h+H*l*.045-bh,bw-3,bh);for(let yy=h+H*l*.045-bh+12;yy<h;yy+=17)for(let xx=x+8;xx<x+bw-5;xx+=13)if(Math.sin(xx*yy)>.2){g.fillStyle='#f3c78b66';g.fillRect(xx,yy,3,5)}}g.fillStyle='#25252a';poly([[W*.43,h],[W*.57,h],[W,H],[0,H]],'#25252a');for(let i=0;i<9;i++){let p=(i+1)/10;line(W*(.5-p*.48),h+p*p*(H-h),W*(.5+p*.48),h+p*p*(H-h),'#d9a77c44')}let bx=W*(.16+sm((t-29)/38)*.7),by=H*(.34-Math.sin(t*.22)*.07);g.save();g.translate(bx,by);g.rotate(Math.sin(t*2)*.15);poly([[-20,0],[0,-8],[21,-1],[4,5]],'#f7e9cc');poly([[-20,0],[-2,-1],[-10,10]],'#c7b89f');g.restore();person(W*.36,H*.83,Math.min(W,H)/650,t*4);let q=sm((t-49)/16);g.globalAlpha=q*.3;poly([[W*.76,H*.7],[W*.79,H*.7],[W,H*.95],[W*.54,H*.95]],'#ffd5a0');g.globalAlpha=1}
+function train(t){bg('#080f1b','#29394a');g.fillStyle='#121c27';g.fillRect(0,H*.1,W,H*.68);g.fillStyle='#303c43';g.fillRect(W*.05,H*.16,W*.9,H*.54);for(let i=0;i<3;i++){let X=W*(.11+i*.29),Y=H*.22,ww=W*.24,hh=H*.38,p=t*.9+i*2,v=Math.sin(p*.09)>.0;let z=g.createLinearGradient(0,Y,0,Y+hh);z.addColorStop(0,v?'#e3a77a':'#8ca9b2');z.addColorStop(1,v?'#5b677b':'#263c4d');g.fillStyle=z;g.fillRect(X,Y,ww,hh);for(let j=0;j<4;j++){let off=(p*35+j*ww/3)%(ww+100)-80;poly([[X+off,Y+hh*.65],[X+off+70,Y+hh*.32],[X+off+145,Y+hh*.65]],j%2?'#364f56':'#263b47')}g.fillStyle='#0a1119';g.fillRect(X-4,Y-4,ww+8,5);g.strokeStyle='#aab8b9';g.strokeRect(X,Y,ww,hh)}g.fillStyle='#0b121b';g.fillRect(0,H*.7,W,H*.11);person(W*.5,H*.84,Math.min(W,H)/630,Math.sin(t*2)*.3);g.globalAlpha=.16;for(let i=0;i<14;i++){let yy=H*(.24+i*.035),xx=(i*173+t*260)%(W+180)-90;line(xx,yy,xx+80,yy,'#e3e5e0')}g.globalAlpha=1}
+function forest(t){bg('#10252a','#66836b');let ground=H*.76;for(let i=0;i<8;i++){let xx=W*i/7;poly([[xx,0],[xx+W*.025,0],[W*.55+(xx-W*.55)*.2,ground],[W*.5+(xx-W*.5)*.2,ground]],'#e8dfb02a')}for(let l=0;l<3;l++){let shift=t*[8,18,31][l]%(W/14);for(let i=-1;i<16;i++){let xx=i*W/14-shift,th=H*(.42+((i*7+l*3+40)%5)*.09);g.fillStyle=['#142b2b','#0e2224','#091719'][l];g.fillRect(xx,ground-th,W*.025,th);dot(xx+W*.01,ground-th,W*(.035+l*.009),['#1c3d36','#15342f','#102a29'][l])}}poly([[W*.42,ground],[W*.58,ground],[W*.78,H],[W*.18,H]],'#a6a17d');let bx=W*(.5+Math.sin(t*.5)*.15),by=H*(.28+Math.cos(t*.8)*.04);poly([[bx-18,by],[bx,by-9],[bx+18,by],[bx+1,by+5]],'#f2e4c5');person(W*.5,ground+H*.12,Math.min(W,H)/620,t*4);for(let i=0;i<12;i++){let xx=(i*137+t*38)%(W+80)-40,yy=(i*71+Math.sin(t+i)*20)%(H*.7);g.save();g.translate(xx,yy);g.rotate(t*.4+i);g.fillStyle='#b4bd85aa';g.beginPath();g.ellipse(0,0,4,12,0,0,PI*2);g.fill();g.restore()}}
+function clouds(t){bg('#1b3151','#e2a77e');for(let l=0;l<4;l++){let y=H*(.62+l*.085),p=[[0,H]];for(let i=0;i<=10;i++){let xx=i*W/10,yy=y-Math.sin(i*1.8+l*2)*H*(.08+l*.012)-H*.04;p.push([xx,yy])}p.push([W,H]);poly(p,['#53677b','#394e67','#263b55','#182a43'][l])}for(let i=0;i<18;i++){let xx=(i*W/12+t*(12+i%4)*3)%(W+180)-90,yy=H*(.48+i%5*.07);g.globalAlpha=.18;dot(xx,yy,36,'#fff');dot(xx+24,yy+5,30,'#fff');dot(xx-24,yy+8,26,'#fff')}g.globalAlpha=1;let vx=W*.56,vy=H*.25;for(let i=0;i<15;i++){let p=i/14,y=mix(H*.91,H*.28,p),w=mix(W*.44,12,p),xx=mix(W*.5,vx,p);poly([[xx-w/2,y],[xx+w/2,y],[xx+w*.46,y-8],[xx-w*.46,y-8]],'#d6c5a6');line(xx-w/2,y,xx+w/2,y,'#fff0d4aa')}person(W*.5,H*.88,Math.min(W,H)/620,t*2);let z=g.createRadialGradient(vx,vy,0,vx,vy,H*.36);z.addColorStop(0,'#fff1d9bb');z.addColorStop(1,'#fff1d900');g.fillStyle=z;g.fillRect(0,0,W,H)}
+function beyond(t){bg('#111d31','#d6a27d');let p=sm((t-207)/38),cx=W*.53,cy=H*.48,fw=W*.44,fh=H*.68;g.fillStyle='#537c89';g.fillRect(0,H*.64,W,H*.36);for(let i=0;i<28;i++){let y=H*(.68+i*.012),off=(t*25+i*53)%W;line(off,y,off+W*(.08+i%4*.04),y,'#d4e4d877')}g.save();g.translate(cx,cy);g.rotate(-.05+Math.sin(t*.3)*.02);let z=g.createLinearGradient(0,-fh/2,0,fh/2);z.addColorStop(0,'#ffe0a8');z.addColorStop(.48,'#c4b6a0');z.addColorStop(1,'#3b6674');g.fillStyle=z;g.fillRect(-fw/2+14,-fh/2+14,fw-28,fh-28);g.strokeStyle='#e8d7b8';g.lineWidth=9;g.strokeRect(-fw/2,-fh/2,fw,fh);g.strokeStyle='#fff7e5';g.lineWidth=1;g.strokeRect(-fw/2+12,-fh/2+12,fw-24,fh-24);g.restore();person(mix(W*.33,W*.53,p),H*.79,Math.min(W,H)/620,t*4);g.globalAlpha=p*.35;let z2=g.createRadialGradient(cx,cy,10,cx,cy,H*.7);z2.addColorStop(0,'#ffe9bf');z2.addColorStop(1,'#ffe9bf00');g.fillStyle=z2;g.fillRect(0,0,W,H);g.globalAlpha=1}
+function morning(t){bg('#f1cda1','#5b7888');let q=sm((t-245)/17),sx=W*.72,sy=H*(.44-q*.12);dot(sx,sy,H*.13,'#ffe7bf');g.fillStyle='#6c9294';g.fillRect(0,H*.64,W,H*.36);poly([[0,H*.66],[W*.18,H*.58],[W*.34,H*.65],[W*.52,H*.59],[W*.72,H*.66],[W,H*.58],[W,H*.72],[0,H*.72]],'#405e63');for(let i=0;i<22;i++){let y=H*(.68+i*.013),w=(Math.sin(i*8+t)*.5+.5)*W*.18;line(sx-w/2,y,sx+w/2,y,'#ffe7bf88')}person(W*.5,H*.86,Math.min(W,H)/620);g.globalAlpha=q;g.fillStyle='#fff2dc';g.textAlign='center';g.font='300 '+Math.max(13,W*.018)+'px Arial';g.fillText('THE WORLD IS WIDER THAN WE KNOW',W/2,H*.25);g.globalAlpha=1}
+function draw(t){let s=0;for(let i=0;i<cuts.length;i++)if(t>=cuts[i].t)s=i;if(s!==scene){scene=s;chapter.textContent=cuts[s].n;caption.textContent=cuts[s].c;caption.style.opacity=s?1:0}([room,city,train,forest,clouds,beyond,morning][s])(t);let end=cuts[s+1]?.t;if(end&&end-t<1.2){g.fillStyle='rgba(4,7,12,'+(1-cl((end-t)/1.2))+')';g.fillRect(0,0,W,H)}g.globalAlpha=.035;g.fillStyle='#fff';for(let i=0;i<100;i++)g.fillRect((Math.sin(i*91+t*13)*.5+.5)*W,(Math.cos(i*17+t*8)*.5+.5)*H,1,1);g.globalAlpha=1}
+function tick(){let t=a.currentTime||0;draw(t);bar.style.width=(t/(a.duration||262.4)*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(a.duration||262.4);requestAnimationFrame(tick)}requestAnimationFrame(tick);
+async function toggle(){if(a.paused){try{await a.play();play.textContent='Ⅱ';title.style.opacity=0}catch(e){}}else{a.pause();play.textContent='▶'}}play.onclick=toggle;a.onplay=()=>{play.textContent='Ⅱ';title.style.opacity=0};a.onpause=()=>play.textContent='▶';a.onended=()=>{title.style.opacity=1;title.querySelector('small').textContent='THE END'};document.querySelector('#restart').onclick=()=>{a.currentTime=0;if(a.paused)toggle()};document.querySelector('#mute').onclick=e=>{a.muted=!a.muted;e.target.textContent=a.muted?'SOUND OFF':'SOUND ON'};seek.onclick=e=>{let r=seek.getBoundingClientRect();a.currentTime=cl((e.clientX-r.left)/r.width)*(a.duration||262.4)};document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();toggle()}});
 })();
-</script>
-</body>
-</html>
+</script></body></html>
