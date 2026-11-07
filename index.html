@@ -6,14 +6,23 @@
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/OutputPass.js';
 let uiIdleTimer=null;function revealControls(){document.querySelector('.controls').classList.remove('is-hidden');clearTimeout(uiIdleTimer);uiIdleTimer=setTimeout(()=>{if(!audio.paused)document.querySelector('.controls').classList.add('is-hidden')},2600)}['pointermove','pointerdown','touchstart','keydown'].forEach(ev=>window.addEventListener(ev,revealControls,{passive:true}));revealControls();
 const audio=document.querySelector('#audio'),playBtn=document.querySelector('#play'),bar=document.querySelector('#bar'),seek=document.querySelector('#seek'),intro=document.querySelector('#intro'),caption=document.querySelector('#caption'),chapter=document.querySelector('#chapter'),loading=document.querySelector('#loading');
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color('#03030b');
-const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,2200);camera.position.set(0,0,12);
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,3200);camera.position.set(0,0,30);
 const ambient=new THREE.AmbientLight(0x8e9bda,.45);scene.add(ambient);
 const key=new THREE.PointLight(0x9a82ff,160,500);key.position.set(0,0,-50);scene.add(key);
 const root=new THREE.Group();scene.add(root);
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.15,.72,.16);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
 const shots=[];
 const palettes=[
 ['#160d35','#4c247e','#d15b9b'],['#061b35','#145b83','#77d8e8'],['#160a32','#6136a5','#e69bc8'],['#08182e','#315e9a','#b8c9ff'],['#240d25','#9b3c65','#f2b57c'],['#071a30','#285e78','#9bd9d5'],['#130c2e','#5b398c','#c2a7ff'],['#081321','#254c72','#d7c7ff']];
@@ -33,7 +42,7 @@ function starfield(count=22000,radius=1800){
  fragmentShader:`varying vec3 vColor;void main(){vec2 p=gl_PointCoord-vec2(.5);float r=length(p);float disc=1.0-smoothstep(.34,.5,r);float core=1.0-smoothstep(.0,.19,r);if(disc<.015)discard;gl_FragColor=vec4(vColor*(.78+core*.7),disc*(.68+core*.32));}`});
  const p=new THREE.Points(geo,mat);root.add(p);return p;
 }
-starfield();
+const starLayer=starfield(26000,1800);
 const nebulaMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{uTime:{value:0},uA:{value:new THREE.Color('#281052')},uB:{value:new THREE.Color('#a13d9b')},uC:{value:new THREE.Color('#e68c9d')},uOpacity:{value:.72}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;uniform float uTime;uniform vec3 uA,uB,uC;uniform float uOpacity;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
@@ -71,6 +80,16 @@ const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioConte
 let lastSlot=-1,hasStarted=false;
 const SHOT_SECONDS=5.35;
 const TOTAL_SHOTS=Math.ceil(262.4/SHOT_SECONDS);
+// Every shot is a place along one continuous flight path, not a replacement cut.
+const routeShots=[];
+for(let slot=0;slot<TOTAL_SHOTS;slot++){
+ const type=(slot*5+Math.floor(slot/12)*3)%12;
+ const instance=shots[type].clone(true);
+ instance.visible=true;
+ instance.position.z=-slot*48;
+ scene.add(instance);
+ routeShots.push(instance);
+}
 const easeInOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
 const shotCaptions=[
 'NEBULA — BIRTH OF LIGHT','STAR CLUSTER — A THOUSAND SUNS','ORBIT — WORLDS IN MOTION',
@@ -88,50 +107,40 @@ function animate(){
  const p=easeInOut(Math.max(0,Math.min(1,local)));
  if(slot!==lastSlot){
   lastSlot=slot;
-  shots.forEach((g,i)=>g.visible=i===idx);
-  chapter.textContent='COSMIC JOURNEY · SHOT '+String(slot+1).padStart(2,'0')+' / '+String(TOTAL_SHOTS).padStart(2,'0');
-  caption.textContent='';caption.style.opacity=0;
+  chapter.textContent='';
   setPalette(idx+slot);
-  camera.fov=[58,64,52,68,56,62][slot%6];
+  camera.fov=62+Math.sin(slot*.7)*3;
   camera.updateProjectionMatrix();
  }
  let beat=0;
  if(analyser){analyser.getByteFrequencyData(data);for(let i=2;i<28;i++)beat+=data[i];beat=beat/(26*255)}
- const g=shots[idx];
+ const g=routeShots[slot];
  const seed=slot*1.61803398875;
- const targetZ=[-65,-5,-42,-2,-35,-8,-12,-45,-40,-60,-40,-70][idx];
- const distance=([0,3,5,8,9,11].includes(idx)?105:82);
- const direction=slot%8;
- const orbit=local*Math.PI*2;
- let x=0,y=0,z=targetZ+distance;
- if(direction===0){x=Math.sin(orbit*.5)*10;y=Math.sin(orbit)*4;z=targetZ+distance-42*p}
- if(direction===1){x=-24+48*p;y=8+Math.sin(orbit)*5;z=targetZ+distance-12*p}
- if(direction===2){x=Math.cos(orbit)*19;y=Math.sin(orbit)*13;z=targetZ+distance-22*p}
- if(direction===3){x=12-24*p;y=-12+24*p;z=targetZ+distance-35*p}
- if(direction===4){x=Math.sin(orbit)*7;y=18-36*p;z=targetZ+distance-18*p}
- if(direction===5){x=-18+36*p;y=Math.sin(orbit)*8;z=targetZ+distance-50*p}
- if(direction===6){x=Math.cos(orbit)*24;y=Math.sin(orbit)*15;z=targetZ+distance-30*p}
- if(direction===7){x=8*Math.sin(orbit);y=4*Math.cos(orbit);z=targetZ+distance-58*p}
+ // Keep one uninterrupted forward trajectory; the next environment is already visible ahead.
+ const travel=t/SHOT_SECONDS*48;
+ const x=Math.sin(t*.105)*5+Math.sin(t*.027)*8;
+ const y=Math.sin(t*.073)*3.2+Math.cos(t*.021)*2.4;
+ const z=30-travel;
  camera.position.set(x,y,z);
- camera.lookAt(Math.sin(seed)*3,Math.cos(seed*.7)*2,targetZ);
- camera.rotation.z+=Math.sin(orbit*.5+seed)*.035;
- const pulse=1+beat*.045;
- g.scale.setScalar(pulse);
- g.rotation.y=Math.sin(seed)*.12+local*(direction%2?-.12:.18)+beat*.04;
- g.rotation.x=Math.cos(seed*.6)*.08+Math.sin(orbit)*.035;
- g.rotation.z=Math.sin(seed*.4)*.06+local*.04;
+ camera.lookAt(x*.72+Math.sin(t*.045)*2,y*.72,z-72);
+ camera.rotation.z=Math.sin(t*.032)*.012;
+ const pulse=1+beat*.025;
+ g.scale.setScalar(idx===10?pulse+beat*.08:pulse);
+ g.rotation.y=Math.sin(seed)*.12+t*.008+beat*.018;
+ g.rotation.x=Math.cos(seed*.6)*.08+Math.sin(t*.04)*.018;
+ g.rotation.z=Math.sin(seed*.4)*.06+Math.sin(t*.025)*.012;
+ // Background stars and the drifting nebula stay around the moving camera.
+ starLayer.position.copy(camera.position);
  nebulaMat.uniforms.uTime.value=t;
- nebula.position.x=Math.sin(t*.018)*18;
- nebula.position.y=Math.cos(t*.014)*8;
+ nebula.position.set(camera.position.x+Math.sin(t*.018)*18,camera.position.y+Math.cos(t*.014)*8,camera.position.z-190);
  nebula.rotation.z=Math.sin(t*.02)*.12;
- key.intensity=115+beat*220;
- if(idx===4){const c=g.children[0];if(c)c.position.x=-32+local*64}
- if(idx===6){g.children.forEach((o,i)=>{if(i%3===0)o.position.x+=Math.sin(t*1.6+i)*.045})}
- if(idx===10)g.scale.setScalar(1+beat*.18+Math.pow(Math.max(0,Math.sin(local*Math.PI*2)),10)*.28);
- if(idx===3||idx===5||idx===9)g.rotation.z+=.003;
- const cutFade=Math.min(1,local/.08,(1-local)/.08);
- renderer.domElement.style.opacity=String(.72+.28*Math.max(0,cutFade));
-renderer.render(scene,camera);
+ key.position.set(camera.position.x+8,camera.position.y+5,camera.position.z-55);
+ key.intensity=105+beat*180;
+ bloomPass.strength=1.05+beat*.48+(idx===10?.65:0);
+ bloomPass.radius=.72;
+ bloomPass.threshold=idx===10?.12:.2;
+ routeShots.forEach((o,i)=>{if(i!==slot)o.rotation.y+=.000035;});
+ composer.render();
 const duration=audio.duration||262.4;bar.style.width=(t/duration*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(duration);
 if(!hasStarted&&t>.5){hasStarted=true;intro.style.opacity=0;loading.style.opacity=0}
 }
@@ -141,6 +150,6 @@ document.querySelector('#restart').onclick=()=>{audio.currentTime=0;if(audio.pau
 document.querySelector('#mute').onclick=e=>{audio.muted=!audio.muted;e.target.textContent=audio.muted?'SOUND OFF':'SOUND ON'};
 seek.onclick=e=>{const r=seek.getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(audio.duration||262.4)};
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();playBtn.click()}});
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));composer.setSize(innerWidth,innerHeight);bloomPass.setSize(innerWidth,innerHeight)});
 animate();loading.style.opacity=0;
 </script></body></html>
