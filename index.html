@@ -151,17 +151,18 @@ function animate(){
  const startEase=1-Math.exp(-t/2.4);
  const travel=140*(t/SHOT_SECONDS-2.4/SHOT_SECONDS*(1-startEase));
  const u=local,phase=t*.18,mode=slot%10;
- let x=0,y=0,roll=0,lookX=0,lookY=0;
- if(mode===0){x=Math.sin(phase)*7;y=Math.sin(phase*.7)*3}
- if(mode===1){x=-15+30*u;y=5*Math.sin(u*Math.PI*2);roll=.05*Math.sin(u*Math.PI*2)}
- if(mode===2){x=Math.cos(u*Math.PI*2)*15;y=Math.sin(u*Math.PI*2)*9;roll=.08*Math.sin(u*Math.PI*2)}
- if(mode===3){x=12*Math.sin(u*Math.PI);y=-12+24*u;roll=-.12+u*.24}
- if(mode===4){x=18*Math.cos(u*Math.PI);y=7*Math.sin(u*Math.PI*2);roll=.1*Math.cos(u*Math.PI*2)}
- if(mode===5){x=-10+20*u;y=9*Math.sin(u*Math.PI);lookX=8*Math.sin(u*Math.PI*2)}
- if(mode===6){x=8*Math.sin(u*Math.PI*3);y=12*Math.cos(u*Math.PI*2);roll=.16*Math.sin(u*Math.PI*3)}
- if(mode===7){x=22*Math.sin(u*Math.PI*2);y=4+8*Math.cos(u*Math.PI*2);lookY=7*Math.sin(u*Math.PI*2)}
- if(mode===8){x=5*Math.sin(u*Math.PI*4);y=-15+30*u;roll=.18*Math.sin(u*Math.PI*2)}
- if(mode===9){x=16*Math.cos(u*Math.PI*2);y=10*Math.sin(u*Math.PI*2);lookX=-10*Math.sin(u*Math.PI*2)}
+ // Each manoeuvre returns to the shared flight line at both ends, so the camera never snaps between shots.
+ let x=Math.sin(t*.04)*6,y=Math.cos(t*.035)*3,roll=0,lookX=0,lookY=0;
+ if(mode===0){x+=Math.sin(u*Math.PI*2)*5;y+=Math.sin(u*Math.PI*4)*2}
+ if(mode===1){x+=Math.sin(u*Math.PI)*18;y+=Math.sin(u*Math.PI*2)*4;roll=.07*Math.sin(u*Math.PI*2)}
+ if(mode===2){x+=(Math.cos(u*Math.PI*2)-1)*12;y+=Math.sin(u*Math.PI*2)*8;roll=.08*Math.sin(u*Math.PI*2)}
+ if(mode===3){x+=Math.sin(u*Math.PI*2)*5;y-=Math.sin(u*Math.PI)*16;roll=-.14*Math.sin(u*Math.PI)}
+ if(mode===4){x+=Math.sin(u*Math.PI*2)*15;y+=Math.sin(u*Math.PI)*6;roll=.12*Math.sin(u*Math.PI)}
+ if(mode===5){x-=Math.sin(u*Math.PI)*12;y+=Math.sin(u*Math.PI)*9;lookX=10*Math.sin(u*Math.PI*2)}
+ if(mode===6){x+=Math.sin(u*Math.PI*3)*7;y+=Math.sin(u*Math.PI*2)*10;roll=.14*Math.sin(u*Math.PI*2)}
+ if(mode===7){x+=Math.sin(u*Math.PI*2)*10;y+=Math.sin(u*Math.PI)*18;lookY=8*Math.sin(u*Math.PI)}
+ if(mode===8){x+=Math.sin(u*Math.PI*4)*8;y+=Math.sin(u*Math.PI*2)*6;roll=.16*Math.sin(u*Math.PI*2)}
+ if(mode===9){x+=(Math.cos(u*Math.PI*2)-1)*16;y+=Math.sin(u*Math.PI*2)*10;lookX=-8*Math.sin(u*Math.PI*2)}
  const z=24-travel;
  camera.position.set(x,y,z);
  camera.lookAt(x*.58+lookX+Math.sin(phase*.5)*2,y*.55+lookY,z-74);
