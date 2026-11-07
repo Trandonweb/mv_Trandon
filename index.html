@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080910">
+<meta name="description" content="Beyond the Frame — an audiovisual journey through the edge of the visible world.">
+<title>BEYOND THE FRAME — Music Film</title>
+<style>
+:root{color-scheme:dark;--ink:#080910;--white:#f3f1ec;--muted:#a6a7b3;--line:#ffffff24}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--white)}
+body{min-height:100svh}canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#05060a99 0%,transparent 24%,transparent 66%,#05060bd9 100%),radial-gradient(ellipse at center,transparent 35%,#02030980 100%)}
+.frame{position:fixed;inset:0;pointer-events:none;border:1px solid #ffffff13}
+.top{position:fixed;top:clamp(20px,4vw,48px);left:clamp(20px,5vw,68px);right:clamp(20px,5vw,68px);display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+.brand{font-size:10px;letter-spacing:.28em;color:#ffffff9c;font-weight:650}.chapter{font-size:10px;letter-spacing:.2em;color:#ffffff70;text-align:right}
+.center-copy{position:fixed;left:50%;top:47%;transform:translate(-50%,-50%);width:min(90vw,1000px);text-align:center;pointer-events:none;text-shadow:0 4px 40px #000}
+.kicker{font-size:clamp(9px,1vw,12px);letter-spacing:.48em;text-transform:uppercase;color:#e8d8c0b0;margin-bottom:22px}
+h1{font-size:clamp(42px,9.2vw,124px);font-weight:300;letter-spacing:.105em;line-height:.98;margin:0 0 18px;padding-left:.105em}
+.sub{font-size:clamp(9px,1.15vw,13px);letter-spacing:.36em;color:#ffffffa3;text-transform:uppercase}
+.bottom{position:fixed;left:clamp(20px,5vw,68px);right:clamp(20px,5vw,68px);bottom:clamp(18px,4vh,42px);display:grid;grid-template-columns:1fr minmax(170px,440px) 1fr;align-items:end;gap:22px}
+.note{font-size:9px;letter-spacing:.22em;color:#ffffff72;text-transform:uppercase;line-height:1.8}
+.controls{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.transport{display:flex;justify-content:center;align-items:center;gap:18px}
+button{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer}
+.play{width:46px;height:46px;border:1px solid #ffffff66;border-radius:50%;display:grid;place-items:center;transition:.25s;background:#ffffff0a;backdrop-filter:blur(12px)}
+.play:hover{background:#ffffff20;border-color:#fff;transform:scale(1.05)}
+.minor{font-size:9px;letter-spacing:.18em;color:#ffffff9c;text-transform:uppercase;padding:9px 4px}
+.track{height:2px;background:#ffffff35;position:relative;cursor:pointer;touch-action:pan-y}
+.progress{height:100%;width:0;background:#e7d7bc;box-shadow:0 0 12px #e7d7bc;pointer-events:none}
+.times{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;font-size:9px;letter-spacing:.12em;color:#ffffff80}
+.right-note{text-align:right}
+.hint{position:fixed;left:50%;bottom:115px;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;color:#ffffff65;text-transform:uppercase;white-space:nowrap;transition:opacity 1s}
+@media(max-width:620px){.bottom{grid-template-columns:1fr;gap:12px;bottom:20px}.note{display:none}.controls{width:min(84vw,420px);margin:auto}.center-copy{top:43%}.chapter{max-width:42%;line-height:1.7}.hint{bottom:112px}}
+@media(prefers-reduced-motion:reduce){.play:hover{transform:none}}
+</style>
+</head>
+<body>
+<canvas id="film" aria-label="Abstract animated music film"></canvas>
+<div class="shade"></div><div class="frame"></div>
+<header class="top"><div class="brand">AN ORIGINAL MUSIC FILM&nbsp; / &nbsp;01</div><div class="chapter" id="chapter">THE THRESHOLD&nbsp; — &nbsp;00:00</div></header>
+<main class="center-copy" id="titleCard"><div class="kicker">A JOURNEY OUTSIDE THE KNOWN</div><h1>BEYOND<br>THE FRAME</h1><div class="sub">LOOK CLOSER. GO FURTHER.</div></main>
+<div class="hint" id="hint">PRESS PLAY TO ENTER</div>
+<section class="bottom" aria-label="Music controls">
+<div class="note">A WORLD IS ONLY<br>AS SMALL AS ITS FRAME.</div>
+<div class="controls">
+<div class="transport">
+<button class="minor" id="restart" aria-label="Restart">↺</button>
+<button class="play" id="play" aria-label="Play"><svg id="playIcon" width="13" height="15" viewBox="0 0 13 15" fill="none"><path d="M1 1.2L12 7.5L1 13.8V1.2Z" fill="currentColor"/></svg></button>
+<button class="minor" id="mute" aria-label="Mute audio">SOUND ON</button>
+</div>
+<div class="track" id="track" role="slider" aria-label="Seek music" aria-valuemin="0" aria-valuemax="262" aria-valuenow="0" tabindex="0"><div class="progress" id="progress"></div></div>
+<div class="times"><span id="elapsed">00:00</span><span>BEYOND THE FRAME</span><span id="duration">04:22</span></div>
+</div>
+<div class="note right-note">AN OPENING<br>INTO THE INFINITE.</div>
+</section>
+<audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
+<script>
+(()=>{
+const canvas=document.getElementById('film'),ctx=canvas.getContext('2d',{alpha:false});
+const audio=document.getElementById('audio'),play=document.getElementById('play'),playIcon=document.getElementById('playIcon');
+const progress=document.getElementById('progress'),track=document.getElementById('track'),elapsed=document.getElementById('elapsed'),duration=document.getElementById('duration');
+const chapter=document.getElementById('chapter'),hint=document.getElementById('hint'),mute=document.getElementById('mute');
+let W=0,H=0,DPR=1,analyser=null,data=null,audioCtx=null,playing=false,last=0,beat=0,particles=[],stars=[];
+const TAU=Math.PI*2,clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
+const fmt=t=>{t=Math.max(0,Math.floor(t||0));return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')};
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);stars=Array.from({length:Math.round(W*H/5000)},()=>({x:Math.random()*W,y:Math.random()*H,z:Math.random(),p:Math.random()*TAU}));}
+addEventListener('resize',resize);resize();
+function initAudio(){if(audioCtx)return;audioCtx=new (window.AudioContext||window.webkitAudioContext)();const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;analyser.smoothingTimeConstant=.82;data=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);analyser.connect(audioCtx.destination);}
+function amp(){if(!analyser||!data)return 0;analyser.getByteFrequencyData(data);let s=0;for(let i=2;i<18;i++)s+=data[i];return s/(16*255);}
+function playState(on){playing=on;play.setAttribute('aria-label',on?'Pause':'Play');playIcon.innerHTML=on?'<path d="M2 1H5V14H2zM8 1H11V14H8z" fill="currentColor"/>':'<path d="M1 1.2L12 7.5L1 13.8V1.2Z" fill="currentColor"/>';hint.style.opacity=on?'0':'1';}
+async function toggle(){if(!audioCtx)initAudio();if(audioCtx.state==='suspended')await audioCtx.resume();if(audio.paused){try{await audio.play();playState(true)}catch(e){hint.textContent='AUDIO COULD NOT START — TAP PLAY AGAIN'}}else{audio.pause();playState(false)}}
+play.addEventListener('click',toggle);audio.addEventListener('play',()=>playState(true));audio.addEventListener('pause',()=>playState(false));audio.addEventListener('ended',()=>playState(false));
+document.getElementById('restart').addEventListener('click',()=>{audio.currentTime=0;if(audio.paused)toggle()});
+mute.addEventListener('click',()=>{audio.muted=!audio.muted;mute.textContent=audio.muted?'SOUND OFF':'SOUND ON'});
+function seek(e){const r=track.getBoundingClientRect();audio.currentTime=clamp((e.clientX-r.left)/r.width)* (audio.duration||262.4)}
+track.addEventListener('click',seek);track.addEventListener('keydown',e=>{if(e.key==='ArrowRight')audio.currentTime=Math.min(audio.duration||262.4,audio.currentTime+5);if(e.key==='ArrowLeft')audio.currentTime=Math.max(0,audio.currentTime-5)});
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!['BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();toggle()}});
+document.addEventListener('dblclick',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()});
+const scenes=[
+{at:0,name:'THE THRESHOLD'},{at:34,name:'A FRACTURE IN TIME'},{at:82,name:'THE UNSEEN EXPANDS'},{at:132,name:'BETWEEN WORLDS'},{at:184,name:'BEYOND THE FRAME'},{at:232,name:'THE AFTERLIGHT'}
+];
+function sceneAt(t){let i=0;for(let j=0;j<scenes.length;j++)if(t>=scenes[j].at)i=j;return i}
+function background(t,a){const s=sceneAt(t),hue=[222,252,192,28,205,38][s];let g=ctx.createRadialGradient(W*.5,H*.47,0,W*.5,H*.5,Math.max(W,H)*.78);g.addColorStop(0,`hsla(${hue},42%,${mix(12,19,a*.7)}%,1)`);g.addColorStop(.55,`hsla(${hue+12},35%,8%,1)`);g.addColorStop(1,'#03040a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ctx.save();ctx.globalAlpha=.34;for(const st of stars){let tw=.3+.7*(.5+.5*Math.sin(t*.7+st.p));ctx.fillStyle='#e7e5df';ctx.globalAlpha=st.z*.55*tw;ctx.beginPath();ctx.arc(st.x,st.y,st.z*1.25,0,TAU);ctx.fill()}ctx.restore();}
+function portal(t,a){const s=sceneAt(t),cx=W*.5,cy=H*.49,scale=Math.min(W,H)*.0015,open=clamp((t-2)/12),pulse=1+a*.12;
+ctx.save();ctx.translate(cx,cy);ctx.rotate(Math.sin(t*.13)*.025);for(let k=7;k>=0;k--){const r=(65+k*28+Math.sin(t*.55+k)*5)*scale*pulse*(.35+.65*open);ctx.beginPath();ctx.ellipse(0,0,r*1.2,r*1.72,0,0,TAU);ctx.strokeStyle=`rgba(${k%2?177:226},${k%2?194:178},${k%2?235:140},${.045+k*.008+a*.035})`;ctx.lineWidth=(k===0?2:1)*scale*1.4;ctx.shadowBlur=20*scale;ctx.shadowColor='#b9c9ef';ctx.stroke();}
+const core=ctx.createRadialGradient(0,0,0,0,0,145*scale*pulse);core.addColorStop(0,'#e8e2d4');core.addColorStop(.12,'#b5c7df88');core.addColorStop(1,'#8ca4d000');ctx.fillStyle=core;ctx.beginPath();ctx.arc(0,0,145*scale*pulse,0,TAU);ctx.fill();ctx.restore();}
+function shards(t,a){const count=sceneAt(t)<2?18:38;ctx.save();for(let i=0;i<count;i++){const seed=i*91.73,ang=seed%TAU+t*(.025+(i%5)*.003),rad=(.16+(i%9)*.065)*Math.min(W,H)*(1+Math.sin(t*.3+i)*.08);const x=W/2+Math.cos(ang)*rad,y=H/2+Math.sin(ang*1.13)*rad*.68;ctx.save();ctx.translate(x,y);ctx.rotate(ang+t*.05);ctx.strokeStyle=`rgba(211,220,235,${.07+(i%4)*.025+a*.08})`;ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(-8-(i%4)*4,-22);ctx.lineTo(0,0);ctx.lineTo(7+(i%3)*5,25);ctx.stroke();ctx.restore()}ctx.restore();}
+function horizon(t,a){const s=sceneAt(t),y=H*.68+Math.sin(t*.25)*H*.015;ctx.save();const glow=ctx.createLinearGradient(0,y-90,0,y+100);glow.addColorStop(0,'#b9c8e000');glow.addColorStop(.5,`rgba(178,194,221,${.10+a*.12})`);glow.addColorStop(1,'#7184a000');ctx.fillStyle=glow;ctx.fillRect(0,y-100,W,220);
+ctx.strokeStyle='#c8d5e733';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+for(let i=0;i<18;i++){let z=(i+1)/18,yy=y+z*z*H*.28;ctx.globalAlpha=(1-z)*.22;ctx.beginPath();ctx.moveTo(W*.5,yy);ctx.lineTo(0,yy+z*14);ctx.moveTo(W*.5,yy);ctx.lineTo(W,yy+z*14);ctx.stroke()}ctx.restore();}
+function rays(t,a){ctx.save();ctx.translate(W/2,H/2);for(let i=0;i<24;i++){const ang=i*TAU/24+t*.018,len=Math.max(W,H)*(.25+(i%5)*.12)*(1+a*.25);ctx.strokeStyle=`rgba(208,218,236,${.025+a*.035})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(Math.cos(ang)*70,Math.sin(ang)*70);ctx.lineTo(Math.cos(ang)*len,Math.sin(ang)*len);ctx.stroke()}ctx.restore();}
+function finale(t,a){const p=clamp((t-225)/37);ctx.save();ctx.globalAlpha=p;ctx.fillStyle='#e7ddca';ctx.textAlign='center';ctx.font=`300 ${Math.max(15,Math.min(22,W*.022))}px system-ui`;ctx.letterSpacing='0.45em';ctx.fillText('THE WORLD DOES NOT END AT THE EDGE.',W/2,H*.83);ctx.restore();}
+function draw(now){const t=audio.currentTime||0,a=amp();beat=mix(beat,a,.18);background(t,beat);const s=sceneAt(t);if(s>=1)shards(t,beat);if(s>=2)horizon(t,beat);if(s>=3)rays(t,beat);portal(t,beat);if(s>=4)finale(t,beat);
+const sc=scenes[s];chapter.textContent=sc.name+'  —  '+fmt(t);progress.style.width=((t/(audio.duration||262.4))*100)+'%';elapsed.textContent=fmt(t);duration.textContent=fmt(audio.duration||262.4);track.setAttribute('aria-valuenow',Math.floor(t));
+if(t>2&&hint.style.opacity!=='0')hint.style.opacity='0';
+requestAnimationFrame(draw)}
+requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
