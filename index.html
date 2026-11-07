@@ -1,24 +1,144 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b12"><title>BEYOND THE FRAME — Music Video</title><style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080b12;color:#f5f0e7;font-family:Arial,sans-serif}canvas{position:fixed;inset:0;width:100%;height:100%}.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#03060b88,transparent 25%,transparent 70%,#03060bdc)}header{position:fixed;top:24px;left:28px;right:28px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.24em;color:#eee0c899;pointer-events:none}#chapter{max-width:60%;text-align:right}#caption{position:fixed;top:15%;left:8%;font-size:10px;letter-spacing:.32em;color:#f5dfb9;text-shadow:0 2px 18px #000;opacity:0;transition:opacity 1s}.controls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);width:min(540px,88vw);display:grid;gap:10px}.buttons{display:flex;align-items:center;justify-content:center;gap:24px}button{border:0;background:transparent;color:#f5f0e7;cursor:pointer}#play{width:42px;height:42px;border:1px solid #ffffff88;border-radius:50%}.minor{font-size:10px;letter-spacing:.15em;color:#ffffffaa}#seek{height:3px;background:#ffffff55;cursor:pointer}#bar{height:100%;width:0;background:#e9d4ae}.times{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.12em;color:#ffffffaa;font-variant-numeric:tabular-nums}#title{position:fixed;inset:0;display:grid;place-items:center;background:#080b12;transition:opacity 1.3s;pointer-events:none;text-align:center}#title strong{font-size:clamp(38px,8vw,92px);font-weight:300;letter-spacing:.13em}#title small{display:block;margin-top:18px;letter-spacing:.4em;color:#e7d2ad}@media(max-width:600px){header{top:17px;left:16px;right:16px;font-size:8px}.controls{bottom:17px}}
-</style></head><body><canvas id="c"></canvas><div class="shade"></div><header><span>AN ORIGINAL MUSIC VIDEO</span><span id="chapter">PROLOGUE · THE ROOM</span></header><div id="caption"></div><div id="title"><div><strong>BEYOND<br>THE FRAME</strong><small>A STORY IN MOTION</small></div></div><div class="controls"><div class="buttons"><button class="minor" id="restart">↺ RESTART</button><button id="play">▶</button><button class="minor" id="mute">SOUND ON</button></div><div id="seek"><div id="bar"></div></div><div class="times"><span id="now">00:00</span><span>BEYOND THE FRAME</span><span id="total">04:22</span></div></div><audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
-<script>
-(()=>{const c=document.querySelector('#c'),g=c.getContext('2d'),a=document.querySelector('#audio'),play=document.querySelector('#play'),bar=document.querySelector('#bar'),seek=document.querySelector('#seek'),caption=document.querySelector('#caption'),chapter=document.querySelector('#chapter'),title=document.querySelector('#title');let W,H,D,scene=-1;const PI=Math.PI,cl=v=>Math.max(0,Math.min(1,v)),sm=v=>{v=cl(v);return v*v*(3-2*v)},mix=(a,b,t)=>a+(b-a)*t,fmt=t=>String(t/60|0).padStart(2,'0')+':'+String(t%60|0).padStart(2,'0');
-const cuts=[{t:0,n:'PROLOGUE · THE ROOM',c:'SOMEWHERE, SOMETHING IS WAITING.'},{t:29,n:'I · THE FIRST DOOR',c:'THE WORLD BEGINS TO MOVE.'},{t:67,n:'II · THE LAST TRAIN',c:'EVERY WINDOW HOLDS ANOTHER LIFE.'},{t:111,n:'III · THE WILD',c:'FOLLOW WHAT YOU CANNOT NAME.'},{t:157,n:'IV · ABOVE THE CLOUDS',c:'THE DISTANCE WAS NEVER THE END.'},{t:207,n:'V · BEYOND THE FRAME',c:'STEP INTO THE UNWRITTEN.'},{t:245,n:'EPILOGUE · MORNING',c:'AND THE WORLD OPENS AGAIN.'}];
-function resize(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;g.setTransform(D,0,0,D,0,0)}addEventListener('resize',resize);resize();
-function bg(a,b){let z=g.createLinearGradient(0,0,0,H);z.addColorStop(0,a);z.addColorStop(1,b);g.fillStyle=z;g.fillRect(0,0,W,H)}
-function poly(p,col){g.fillStyle=col;g.beginPath();p.forEach((v,i)=>i?g.lineTo(...v):g.moveTo(...v));g.closePath();g.fill()}
-function line(x,y,X,Y,col='#fff',w=1){g.strokeStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(x,y);g.lineTo(X,Y);g.stroke()}
-function dot(x,y,r,col){g.fillStyle=col;g.beginPath();g.arc(x,y,r,0,PI*2);g.fill()}
-function person(x,y,s,step=0,col='#080d13'){g.save();g.translate(x,y);g.scale(s,s);dot(0,-44,8,col);poly([[-8,-34],[8,-34],[12,-5],[6,0],[-7,0],[-12,-5]],col);line(-5,-5,-8+Math.sin(step)*6,18,col,5);line(5,-5,8-Math.sin(step)*6,18,col,5);line(-8,-28,-16+Math.sin(step)*4,-8,col,4);line(8,-28,16-Math.sin(step)*4,-8,col,4);g.restore()}
-function room(t){bg('#111b2b','#27232a');let f=H*.76;g.fillStyle='#080f1b';g.fillRect(W*.59,H*.13,W*.29,H*.52);for(let i=0;i<8;i++){let x=W*(.60+i*.034),h=H*(.12+(i%5)*.04);g.fillStyle='#101d29';g.fillRect(x,f-h,W*.026,h);for(let j=0;j<3;j++)dot(x+8+j*9,f-h+16+j*19,2,'#d7b98a66')}g.fillStyle='#080d16';g.fillRect(W*.58,H*.1,6,H*.56);g.fillRect(W*.88,H*.1,6,H*.56);g.fillRect(W*.72,H*.1,4,H*.56);g.fillStyle='#302d30';g.fillRect(W*.08,f,W*.84,H*.23);line(W*.28,f-3,W*.31,H*.49,'#a48f74',5);line(W*.31,H*.49,W*.4,H*.45,'#a48f74',4);poly([[W*.37,H*.43],[W*.45,H*.43],[W*.42,H*.48],[W*.39,H*.48]],'#d6b887');person(W*.49,f,Math.min(W,H)/580,Math.sin(t)*.2);g.fillStyle='#bca77f';g.fillRect(W*.45,H*.68,W*.065,H*.055);let q=sm((t-17)/10);g.save();g.globalAlpha=q;line(W*.18,H*.12,W*.21,H*.29,'#ffe0a5',2);line(W*.21,H*.29,W*.17,H*.42,'#ffe0a5',2);line(W*.21,H*.29,W*.27,H*.37,'#ffe0a5',1);let z=g.createRadialGradient(W*.2,H*.29,0,W*.2,H*.29,180);z.addColorStop(0,'#ffe1a888');z.addColorStop(1,'#ffe1a800');g.fillStyle=z;g.fillRect(0,0,W,H);g.restore()}
-function city(t){bg('#18283b','#d18b67');let h=H*.67;for(let l=0;l<3;l++)for(let i=-1;i<13;i++){let bw=W/10,x=i*bw-(t*[.12,.3,.6][l]*55%(bw)),bh=H*(.16+((i*7+l*3+30)%7)*.045);g.fillStyle=['#1b2935','#17232e','#111b27'][l];g.fillRect(x,h+H*l*.045-bh,bw-3,bh);for(let yy=h+H*l*.045-bh+12;yy<h;yy+=17)for(let xx=x+8;xx<x+bw-5;xx+=13)if(Math.sin(xx*yy)>.2){g.fillStyle='#f3c78b66';g.fillRect(xx,yy,3,5)}}g.fillStyle='#25252a';poly([[W*.43,h],[W*.57,h],[W,H],[0,H]],'#25252a');for(let i=0;i<9;i++){let p=(i+1)/10;line(W*(.5-p*.48),h+p*p*(H-h),W*(.5+p*.48),h+p*p*(H-h),'#d9a77c44')}let bx=W*(.16+sm((t-29)/38)*.7),by=H*(.34-Math.sin(t*.22)*.07);g.save();g.translate(bx,by);g.rotate(Math.sin(t*2)*.15);poly([[-20,0],[0,-8],[21,-1],[4,5]],'#f7e9cc');poly([[-20,0],[-2,-1],[-10,10]],'#c7b89f');g.restore();person(W*.36,H*.83,Math.min(W,H)/650,t*4);let q=sm((t-49)/16);g.globalAlpha=q*.3;poly([[W*.76,H*.7],[W*.79,H*.7],[W,H*.95],[W*.54,H*.95]],'#ffd5a0');g.globalAlpha=1}
-function train(t){bg('#080f1b','#29394a');g.fillStyle='#121c27';g.fillRect(0,H*.1,W,H*.68);g.fillStyle='#303c43';g.fillRect(W*.05,H*.16,W*.9,H*.54);for(let i=0;i<3;i++){let X=W*(.11+i*.29),Y=H*.22,ww=W*.24,hh=H*.38,p=t*.9+i*2,v=Math.sin(p*.09)>.0;let z=g.createLinearGradient(0,Y,0,Y+hh);z.addColorStop(0,v?'#e3a77a':'#8ca9b2');z.addColorStop(1,v?'#5b677b':'#263c4d');g.fillStyle=z;g.fillRect(X,Y,ww,hh);for(let j=0;j<4;j++){let off=(p*35+j*ww/3)%(ww+100)-80;poly([[X+off,Y+hh*.65],[X+off+70,Y+hh*.32],[X+off+145,Y+hh*.65]],j%2?'#364f56':'#263b47')}g.fillStyle='#0a1119';g.fillRect(X-4,Y-4,ww+8,5);g.strokeStyle='#aab8b9';g.strokeRect(X,Y,ww,hh)}g.fillStyle='#0b121b';g.fillRect(0,H*.7,W,H*.11);person(W*.5,H*.84,Math.min(W,H)/630,Math.sin(t*2)*.3);g.globalAlpha=.16;for(let i=0;i<14;i++){let yy=H*(.24+i*.035),xx=(i*173+t*260)%(W+180)-90;line(xx,yy,xx+80,yy,'#e3e5e0')}g.globalAlpha=1}
-function forest(t){bg('#10252a','#66836b');let ground=H*.76;for(let i=0;i<8;i++){let xx=W*i/7;poly([[xx,0],[xx+W*.025,0],[W*.55+(xx-W*.55)*.2,ground],[W*.5+(xx-W*.5)*.2,ground]],'#e8dfb02a')}for(let l=0;l<3;l++){let shift=t*[8,18,31][l]%(W/14);for(let i=-1;i<16;i++){let xx=i*W/14-shift,th=H*(.42+((i*7+l*3+40)%5)*.09);g.fillStyle=['#142b2b','#0e2224','#091719'][l];g.fillRect(xx,ground-th,W*.025,th);dot(xx+W*.01,ground-th,W*(.035+l*.009),['#1c3d36','#15342f','#102a29'][l])}}poly([[W*.42,ground],[W*.58,ground],[W*.78,H],[W*.18,H]],'#a6a17d');let bx=W*(.5+Math.sin(t*.5)*.15),by=H*(.28+Math.cos(t*.8)*.04);poly([[bx-18,by],[bx,by-9],[bx+18,by],[bx+1,by+5]],'#f2e4c5');person(W*.5,ground+H*.12,Math.min(W,H)/620,t*4);for(let i=0;i<12;i++){let xx=(i*137+t*38)%(W+80)-40,yy=(i*71+Math.sin(t+i)*20)%(H*.7);g.save();g.translate(xx,yy);g.rotate(t*.4+i);g.fillStyle='#b4bd85aa';g.beginPath();g.ellipse(0,0,4,12,0,0,PI*2);g.fill();g.restore()}}
-function clouds(t){bg('#1b3151','#e2a77e');for(let l=0;l<4;l++){let y=H*(.62+l*.085),p=[[0,H]];for(let i=0;i<=10;i++){let xx=i*W/10,yy=y-Math.sin(i*1.8+l*2)*H*(.08+l*.012)-H*.04;p.push([xx,yy])}p.push([W,H]);poly(p,['#53677b','#394e67','#263b55','#182a43'][l])}for(let i=0;i<18;i++){let xx=(i*W/12+t*(12+i%4)*3)%(W+180)-90,yy=H*(.48+i%5*.07);g.globalAlpha=.18;dot(xx,yy,36,'#fff');dot(xx+24,yy+5,30,'#fff');dot(xx-24,yy+8,26,'#fff')}g.globalAlpha=1;let vx=W*.56,vy=H*.25;for(let i=0;i<15;i++){let p=i/14,y=mix(H*.91,H*.28,p),w=mix(W*.44,12,p),xx=mix(W*.5,vx,p);poly([[xx-w/2,y],[xx+w/2,y],[xx+w*.46,y-8],[xx-w*.46,y-8]],'#d6c5a6');line(xx-w/2,y,xx+w/2,y,'#fff0d4aa')}person(W*.5,H*.88,Math.min(W,H)/620,t*2);let z=g.createRadialGradient(vx,vy,0,vx,vy,H*.36);z.addColorStop(0,'#fff1d9bb');z.addColorStop(1,'#fff1d900');g.fillStyle=z;g.fillRect(0,0,W,H)}
-function beyond(t){bg('#111d31','#d6a27d');let p=sm((t-207)/38),cx=W*.53,cy=H*.48,fw=W*.44,fh=H*.68;g.fillStyle='#537c89';g.fillRect(0,H*.64,W,H*.36);for(let i=0;i<28;i++){let y=H*(.68+i*.012),off=(t*25+i*53)%W;line(off,y,off+W*(.08+i%4*.04),y,'#d4e4d877')}g.save();g.translate(cx,cy);g.rotate(-.05+Math.sin(t*.3)*.02);let z=g.createLinearGradient(0,-fh/2,0,fh/2);z.addColorStop(0,'#ffe0a8');z.addColorStop(.48,'#c4b6a0');z.addColorStop(1,'#3b6674');g.fillStyle=z;g.fillRect(-fw/2+14,-fh/2+14,fw-28,fh-28);g.strokeStyle='#e8d7b8';g.lineWidth=9;g.strokeRect(-fw/2,-fh/2,fw,fh);g.strokeStyle='#fff7e5';g.lineWidth=1;g.strokeRect(-fw/2+12,-fh/2+12,fw-24,fh-24);g.restore();person(mix(W*.33,W*.53,p),H*.79,Math.min(W,H)/620,t*4);g.globalAlpha=p*.35;let z2=g.createRadialGradient(cx,cy,10,cx,cy,H*.7);z2.addColorStop(0,'#ffe9bf');z2.addColorStop(1,'#ffe9bf00');g.fillStyle=z2;g.fillRect(0,0,W,H);g.globalAlpha=1}
-function morning(t){bg('#f1cda1','#5b7888');let q=sm((t-245)/17),sx=W*.72,sy=H*(.44-q*.12);dot(sx,sy,H*.13,'#ffe7bf');g.fillStyle='#6c9294';g.fillRect(0,H*.64,W,H*.36);poly([[0,H*.66],[W*.18,H*.58],[W*.34,H*.65],[W*.52,H*.59],[W*.72,H*.66],[W,H*.58],[W,H*.72],[0,H*.72]],'#405e63');for(let i=0;i<22;i++){let y=H*(.68+i*.013),w=(Math.sin(i*8+t)*.5+.5)*W*.18;line(sx-w/2,y,sx+w/2,y,'#ffe7bf88')}person(W*.5,H*.86,Math.min(W,H)/620);g.globalAlpha=q;g.fillStyle='#fff2dc';g.textAlign='center';g.font='300 '+Math.max(13,W*.018)+'px Arial';g.fillText('THE WORLD IS WIDER THAN WE KNOW',W/2,H*.25);g.globalAlpha=1}
-function draw(t){let s=0;for(let i=0;i<cuts.length;i++)if(t>=cuts[i].t)s=i;if(s!==scene){scene=s;chapter.textContent=cuts[s].n;caption.textContent=cuts[s].c;caption.style.opacity=s?1:0}([room,city,train,forest,clouds,beyond,morning][s])(t);let end=cuts[s+1]?.t;if(end&&end-t<1.2){g.fillStyle='rgba(4,7,12,'+(1-cl((end-t)/1.2))+')';g.fillRect(0,0,W,H)}g.globalAlpha=.035;g.fillStyle='#fff';for(let i=0;i<100;i++)g.fillRect((Math.sin(i*91+t*13)*.5+.5)*W,(Math.cos(i*17+t*8)*.5+.5)*H,1,1);g.globalAlpha=1}
-function tick(){let t=a.currentTime||0;draw(t);bar.style.width=(t/(a.duration||262.4)*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(a.duration||262.4);requestAnimationFrame(tick)}requestAnimationFrame(tick);
-async function toggle(){if(a.paused){try{await a.play();play.textContent='Ⅱ';title.style.opacity=0}catch(e){}}else{a.pause();play.textContent='▶'}}play.onclick=toggle;a.onplay=()=>{play.textContent='Ⅱ';title.style.opacity=0};a.onpause=()=>play.textContent='▶';a.onended=()=>{title.style.opacity=1;title.querySelector('small').textContent='THE END'};document.querySelector('#restart').onclick=()=>{a.currentTime=0;if(a.paused)toggle()};document.querySelector('#mute').onclick=e=>{a.muted=!a.muted;e.target.textContent=a.muted?'SOUND OFF':'SOUND ON'};seek.onclick=e=>{let r=seek.getBoundingClientRect();a.currentTime=cl((e.clientX-r.left)/r.width)*(a.duration||262.4)};document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();toggle()}});
-})();
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050912"><title>BEYOND THE FRAME — A 3D Cinematic</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050912;color:#f4eee3;font-family:Inter,Arial,sans-serif}canvas{position:fixed;inset:0;display:block}.veil{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#02050b99 0%,transparent 22%,transparent 72%,#02050bdc 100%)}header{position:fixed;top:26px;left:30px;right:30px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.28em;color:#f3e8d0a8;pointer-events:none}#chapter{max-width:65%;text-align:right}#caption{position:fixed;left:8vw;top:17vh;font-size:10px;letter-spacing:.32em;color:#f5dfb9;text-shadow:0 2px 20px #000;opacity:0;transition:opacity 1s}.controls{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:min(560px,88vw);display:grid;gap:11px}.buttons{display:flex;align-items:center;justify-content:center;gap:25px}button{border:0;background:none;color:#f5f0e7;cursor:pointer}#play{width:42px;height:42px;border:1px solid #ffffff88;border-radius:50%;font-size:14px}.minor{font-size:9px;letter-spacing:.17em;color:#ffffffb0}#seek{height:2px;background:#ffffff4c;cursor:pointer}#bar{height:100%;width:0;background:#e8d2aa;box-shadow:0 0 12px #ffe2b5}.times{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.13em;color:#ffffff9c;font-variant-numeric:tabular-nums}#intro{position:fixed;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;background:radial-gradient(ellipse at center,#101c2a88,transparent 65%);transition:opacity 1.4s}#intro strong{font-size:clamp(35px,8vw,94px);font-weight:200;letter-spacing:.16em;line-height:1.12;text-shadow:0 5px 35px #000}#intro small{display:block;margin-top:22px;font-size:9px;letter-spacing:.5em;color:#e9d4b3}.loading{position:fixed;left:50%;top:55%;transform:translate(-50%,-50%);font-size:9px;letter-spacing:.3em;color:#ffffff88;pointer-events:none;transition:opacity .6s}@media(max-width:600px){header{top:17px;left:16px;right:16px;font-size:8px}.controls{bottom:18px}#caption{top:14vh}}
+</style>
+</head>
+<body>
+<div class="veil"></div><header><span>AN ORIGINAL 3D CINEMATIC</span><span id="chapter">PROLOGUE · THE STILL WORLD</span></header><div id="caption"></div>
+<div id="intro"><div><strong>BEYOND<br>THE FRAME</strong><small>A WORLD WITHOUT EDGES</small></div></div><div class="loading" id="loading">BUILDING THE WORLD</div>
+<div class="controls"><div class="buttons"><button class="minor" id="restart">↺ RESTART</button><button id="play">▶</button><button class="minor" id="mute">SOUND ON</button></div><div id="seek"><div id="bar"></div></div><div class="times"><span id="now">00:00</span><span>BEYOND THE FRAME</span><span id="total">04:22</span></div></div>
+<audio id="audio" preload="metadata" src="songs/Beyond%20the%20Frame.mp3"></audio>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const audio=document.querySelector('#audio'),playBtn=document.querySelector('#play'),bar=document.querySelector('#bar'),seek=document.querySelector('#seek'),intro=document.querySelector('#intro'),caption=document.querySelector('#caption'),chapter=document.querySelector('#chapter'),loading=document.querySelector('#loading');
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;document.body.prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#101b2a');scene.fog=new THREE.FogExp2('#101b2a',.008);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,1400);camera.position.set(0,5,20);
+scene.add(new THREE.HemisphereLight(0xb9d6f2,0x302a29,1.25));
+const sun=new THREE.DirectionalLight(0xffd6a1,3.2);sun.position.set(-35,55,25);scene.add(sun);
+const fill=new THREE.DirectionalLight(0x9db9dc,1.1);fill.position.set(35,18,-30);scene.add(fill);
+const world=new THREE.Group();scene.add(world);
+const chapters=[
+{t:0,n:'PROLOGUE · THE STILL WORLD',c:'BEFORE THE FIRST STEP, THERE WAS SILENCE.'},
+{t:29,n:'I · THE EDGE OF THE EARTH',c:'THE HORIZON IS ONLY A BEGINNING.'},
+{t:67,n:'II · THE PASSAGE',c:'THE WORLD SLIPS PAST LIKE A DREAM.'},
+{t:111,n:'III · THE GREEN CATHEDRAL',c:'LIFE GROWS WHERE LIGHT CAN REACH.'},
+{t:157,n:'IV · ABOVE THE CLOUDS',c:'SOMEWHERE, THE SKY BECOMES LAND.'},
+{t:207,n:'V · BEYOND THE FRAME',c:'THERE IS MORE ON THE OTHER SIDE.'},
+{t:245,n:'EPILOGUE · THE FIRST LIGHT',c:'NOT AN END. A DIFFERENT BEGINNING.'}
+];
+const groups=[];
+const mat=(color,roughness=.8,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+const m={deep:mat('#101b25'),rock:mat('#26343b'),sand:mat('#9b8970'),pine:mat('#173b35'),leaf:mat('#285345'),snow:mat('#c6d2d1'),gold:mat('#e7c28b',.32,.55),water:mat('#174b60',.23,.32),dark:mat('#101922'),cloud:mat('#d4dce0',.95),bark:mat('#392d25'),grass:mat('#506d50')};
+function group(){const g=new THREE.Group();world.add(g);groups.push(g);return g}
+function mesh(parent,geo,material,x=0,y=0,z=0){const o=new THREE.Mesh(geo,material);o.position.set(x,y,z);parent.add(o);return o}
+function terrain(parent,size=220,segments=100,fn=(x,z)=>0,material=m.grass){const geo=new THREE.PlaneGeometry(size,size,segments,segments);geo.rotateX(-Math.PI/2);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,fn(x,z))}geo.computeVertexNormals();return mesh(parent,geo,material)}
+function mountain(parent,x,z,sx,sy,sz,seed=1,snow=false){const geo=new THREE.ConeGeometry(1,1,7,5);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);if(y>0)p.setY(i,y*(.82+.18*Math.sin(i*seed*2.7)));p.setX(i,p.getX(i)*(1+.12*Math.sin(i*seed)));}geo.computeVertexNormals();const o=mesh(parent,geo,snow?m.snow:m.rock,x,sy/2,z);o.scale.set(sx,sy,sz);return o}
+function tree(parent,x,z,s=1,variant=0){const g=new THREE.Group();g.position.set(x,0,z);g.scale.setScalar(s);parent.add(g);mesh(g,new THREE.CylinderGeometry(.12,.24,3.5,7),m.bark,0,1.7,0);for(let i=0;i<4;i++){const h=3.1+i*.72;const cone=mesh(g,new THREE.ConeGeometry(1.35-i*.19,2.7,7),variant?m.leaf:m.pine,0,h,0);cone.scale.set(1,1,1)}return g}
+function cloud(parent,x,y,z,s=1){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);for(let i=0;i<6;i++){const o=mesh(g,new THREE.SphereGeometry(1,16,12),m.cloud,(i-2.5)*.9,Math.sin(i*2)*.22,Math.cos(i*1.7)*.35);o.scale.set(1.25,.65,.8);o.material=m.cloud}g.scale.setScalar(s);return g}
+function particles(parent,count,color,size,spread,seed=1){const geo=new THREE.BufferGeometry(),a=new Float32Array(count*3);let st=seed;const rand=()=>{st=(st*1664525+1013904223)>>>0;return st/4294967296};for(let i=0;i<count;i++){a[i*3]=(rand()-.5)*spread;a[i*3+1]=rand()*spread*.55;a[i*3+2]=(rand()-.5)*spread}geo.setAttribute('position',new THREE.BufferAttribute(a,3));const o=new THREE.Points(geo,new THREE.PointsMaterial({color,size,transparent:true,opacity:.75,depthWrite:false}));parent.add(o);return o}
+function sea(parent){const geo=new THREE.PlaneGeometry(700,700,150,150);geo.rotateX(-Math.PI/2);const p=geo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,Math.sin(x*.055)*.22+Math.cos(z*.047)*.18)}geo.computeVertexNormals();const water=new THREE.MeshPhysicalMaterial({color:'#28657a',metalness:.32,roughness:.22,clearcoat:1,clearcoatRoughness:.1});const o=mesh(parent,geo,water,0,-1,0);o.userData.wave=true;return o}
+// 0: a quiet, monumental coastline at blue hour
+{
+ const g=group();g.background='#101b2a';terrain(g,260,110,(x,z)=>-2+Math.sin(x*.025)*1.4+Math.cos(z*.03)*1.2+Math.sin((x+z)*.018)*1.1,m.sand);
+ sea(g);for(let i=0;i<9;i++)mountain(g,-115+i*29,-85-(i%3)*22,24+(i%4)*8,35+(i%3)*18,22,1+i,i%3===0);
+ const moon=mesh(g,new THREE.SphereGeometry(7,32,24),new THREE.MeshBasicMaterial({color:'#f2d9b2'}),-36,30,-115);const halo=mesh(g,new THREE.SphereGeometry(10,24,16),new THREE.MeshBasicMaterial({color:'#f4d6a1',transparent:true,opacity:.1}),-36,30,-115);
+ particles(g,1000,'#c7d9e2',.24,220,3);
+}
+// 1: open sea, black cliffs and a distant sun
+{
+ const g=group();terrain(g,300,100,(x,z)=>-5+Math.sin(x*.02)*1.2,m.sand);sea(g);
+ for(let i=0;i<7;i++){mountain(g,-130+i*43,-45-(i%2)*35,30,24+(i%3)*13,24,2+i)}
+ const sunDisk=mesh(g,new THREE.SphereGeometry(11,32,24),new THREE.MeshBasicMaterial({color:'#ffd5a0'}),48,26,-130);
+ for(let i=0;i<5;i++){const cliff=mesh(g,new THREE.DodecahedronGeometry(1,1),m.deep,-95+i*48,8+(i%3)*4,-30-i*9);cliff.scale.set(15,18+i%3*8,11)}
+ particles(g,500,'#f8d8a5',.35,180,7);
+}
+// 2: a monumental stone passage through the landscape
+{
+ const g=group();terrain(g,220,90,(x,z)=>-2+Math.sin(x*.035)*2+Math.cos(z*.03)*1.4,m.rock);
+ for(let i=0;i<10;i++)mountain(g,-125+i*28,-90-(i%4)*16,22,38+(i%3)*16,20,4+i,i%2===0);
+ const arch=new THREE.Group();g.add(arch);const stone=mat('#9d8d79',.92);for(const x of [-9,9]){const p=mesh(arch,new THREE.BoxGeometry(2.8,20,3.2),stone,x,10,-35);p.rotation.z=x<0?-.04:.04}
+ const top=mesh(arch,new THREE.TorusGeometry(9,1.5,12,64,Math.PI),stone,0,19,-35);top.rotation.z=Math.PI;
+ const path=mesh(g,new THREE.PlaneGeometry(18,150),mat('#766c5f'),0,-.5,25);path.rotation.x=-Math.PI/2;
+ particles(g,700,'#e5d0a9',.2,130,9);
+}
+// 3: forest cathedral, layers of giant trees and sun shafts
+{
+ const g=group();terrain(g,170,90,(x,z)=>-1+Math.sin(x*.07)*.45+Math.cos(z*.06)*.5,m.grass);
+ for(let row=0;row<7;row++)for(let i=0;i<13;i++){const x=(i-6)*13+(row%2)*6,z=-75+row*24;if(Math.abs(x)<15&&z>5)continue;tree(g,x,z,.8+(i%4)*.16,(i+row)%2)}
+ const path=mesh(g,new THREE.PlaneGeometry(18,180),mat('#7d785c'),0,-.1,12);path.rotation.x=-Math.PI/2;
+ const sunBeam=new THREE.SpotLight(0xffe4b4,180,150,Math.PI/5,.8,1.4);sunBeam.position.set(-18,48,-25);sunBeam.target.position.set(0,0,20);g.add(sunBeam,sunBeam.target);
+ particles(g,1200,'#d9e6b7',.18,150,11);
+}
+// 4: alpine peaks above a moving cloud sea
+{
+ const g=group();terrain(g,260,100,(x,z)=>-6+Math.sin(x*.025)*1.5,m.snow);
+ for(let i=0;i<12;i++)mountain(g,-155+i*28,-75-(i%4)*25,25+(i%3)*9,55+(i%4)*22,24,8+i,true);
+ for(let i=0;i<30;i++)cloud(g,-180+(i%6)*68,2+Math.floor(i/6)*5,-100+Math.floor(i/6)*40,.7+(i%3)*.25);
+ const steps=new THREE.Group();g.add(steps);for(let i=0;i<18;i++){const s=mesh(steps,new THREE.BoxGeometry(7,.65,4),mat('#d6c5a6',.48,.18),-2+i*.65,-2+i*1.2,22-i*7);s.rotation.z=-.04}
+ const sunGlow=mesh(g,new THREE.SphereGeometry(9,32,20),new THREE.MeshBasicMaterial({color:'#ffe0ad'}),32,42,-115);
+ particles(g,900,'#fff0d3',.3,220,17);
+}
+// 5: the frame, the reveal, and the great crossing
+{
+ const g=group();sea(g);terrain(g,280,80,(x,z)=>-7+Math.sin(x*.02)*1.3,m.sand);
+ for(let i=0;i<9;i++)mountain(g,-150+i*38,-120-(i%3)*25,34,42+(i%3)*14,30,13+i);
+ const portal=new THREE.Group();portal.position.set(0,16,-42);g.add(portal);
+ const frameMat=new THREE.MeshStandardMaterial({color:'#e9c991',metalness:.8,roughness:.2,emissive:'#7a4c20',emissiveIntensity:.6});
+ const outer=mesh(portal,new THREE.TorusGeometry(15,.8,16,120),frameMat,0,0,0);outer.scale.set(1,1.38,1);
+ const inner=mesh(portal,new THREE.TorusGeometry(13,.13,8,100),new THREE.MeshBasicMaterial({color:'#fff0d0'}),0,0,.2);inner.scale.set(1,1.38,1);
+ const gate=mesh(portal,new THREE.CircleGeometry(13,80),new THREE.MeshBasicMaterial({color:'#d9a66d',side:THREE.DoubleSide,transparent:true,opacity:.8}),0,0,-.3);gate.scale.y=1.38;
+ const glow=mesh(portal,new THREE.CircleGeometry(12,80),new THREE.MeshBasicMaterial({color:'#fff0cf',transparent:true,opacity:.23}),0,0,-.2);glow.scale.y=1.38;
+ const rays=new THREE.Group();portal.add(rays);for(let i=0;i<18;i++){const a=i*Math.PI*2/18;const beam=mesh(rays,new THREE.CylinderGeometry(.035,.35,46,6,1,true),new THREE.MeshBasicMaterial({color:'#ffe4b2',transparent:true,opacity:.13,side:THREE.DoubleSide}),Math.cos(a)*18,0,Math.sin(a)*18);beam.rotation.z=Math.PI/2;beam.rotation.y=-a}
+ particles(g,2400,'#ffe2b1',.28,150,23);
+ g.userData.portal=portal;g.userData.gate=gate;g.userData.glow=glow;
+}
+// 6: calm sunrise, ocean horizon, and an open sky
+{
+ const g=group();sea(g);terrain(g,300,80,(x,z)=>-5+Math.sin(x*.018)*1.2,m.sand);
+ const sunBall=mesh(g,new THREE.SphereGeometry(10,40,24),new THREE.MeshBasicMaterial({color:'#fff0cf'}),55,30,-150);
+ const halo=mesh(g,new THREE.SphereGeometry(18,32,20),new THREE.MeshBasicMaterial({color:'#ffd9a1',transparent:true,opacity:.1}),55,30,-150);
+ for(let i=0;i<6;i++)mountain(g,-150+i*60,-115-(i%2)*25,40,25+(i%3)*10,25,20+i);
+ particles(g,800,'#fff0d6',.18,220,31);
+}
+const totalDuration=262.4;let active=-1,started=false,analyser=null,data=null;
+const audioCtx=(()=>{try{return new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();
+if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
+function setChapter(t){let n=0;for(let i=0;i<chapters.length;i++)if(t>=chapters[i].t)n=i;if(n!==active){active=n;chapter.textContent=chapters[n].n;caption.textContent=chapters[n].c;caption.style.opacity=n===0?0:1}}
+const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)};
+function animate(){requestAnimationFrame(animate);const t=audio.currentTime||0;setChapter(t);let idx=0;for(let i=0;i<chapters.length;i++)if(t>=chapters[i].t)idx=i;
+groups.forEach((g,i)=>{g.visible=i===idx;});
+const local=t-chapters[idx].t;const beat=(()=>{if(!analyser)return 0;analyser.getByteFrequencyData(data);let s=0;for(let i=2;i<30;i++)s+=data[i];return s/(28*255)})();
+const camPaths=[
+{p:[Math.sin(t*.08)*2,7+Math.sin(t*.13)*.5,34-t*.05],look:[0,4,-40]},
+{p:[-22+t*.48,9+Math.sin(t*.12)*1.2,42-t*.8],look:[0,4,-50]},
+{p:[Math.sin(t*.18)*14,10,48-local*.8],look:[0,9,-30]},
+{p:[Math.sin(t*.09)*20,10+Math.sin(t*.17)*2,45-local*.65],look:[0,8,-25]},
+{p:[-26+local*.65,17+Math.sin(t*.1)*2,45-local*.75],look:[0,16,-45]},
+{p:[-3+Math.sin(local*.09)*5,14+Math.sin(local*.11)*2,70-smooth(local/38)*58],look:[0,17,-42]},
+{p:[0,12,40-local*.22],look:[0,12,-80]}
+][idx];
+let intensity=idx===5?smooth((local-2)/10)*(1-smooth((local-37)/7)):0;
+camera.position.set(camPaths.p[0],camPaths.p[1],camPaths.p[2]);camera.lookAt(...camPaths.look);
+if(idx===5){camera.position.z-=intensity*20;camera.fov=48+intensity*5;camera.updateProjectionMatrix();const p=groups[5].userData.portal;p.rotation.z=Math.sin(t*.7)*.035;p.scale.setScalar(1+intensity*.22+beat*.045);groups[5].userData.gate.material.opacity=.48+intensity*.45;groups[5].userData.glow.material.opacity=.12+intensity*.55;sun.intensity=3.2+intensity*5+beat*2;}else{camera.fov=48;camera.updateProjectionMatrix();sun.intensity=3.2+beat*.4}
+groups[idx].rotation.y=Math.sin(t*.04)*.025;
+groups[idx].children.forEach(o=>{if(o.userData.wave&&o.geometry.attributes.position){const p=o.geometry.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,-1+Math.sin(x*.055+t*.8)*.25+Math.cos(z*.047+t*.7)*.2)}p.needsUpdate=true;o.geometry.computeVertexNormals()}});
+renderer.render(scene,camera);
+bar.style.width=(t/(audio.duration||totalDuration)*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(audio.duration||totalDuration);
+if(!started&&t>1){started=true;intro.style.opacity=0;loading.style.opacity=0}
+}
+const fmt=t=>String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0');
+playBtn.onclick=async()=>{if(audio.paused){try{if(audioCtx?.state==='suspended')await audioCtx.resume();await audio.play();intro.style.opacity=0;playBtn.textContent='Ⅱ'}catch(e){loading.textContent='TAP PLAY TO BEGIN';loading.style.opacity=1}}else{audio.pause();playBtn.textContent='▶'}};
+audio.onplay=()=>{playBtn.textContent='Ⅱ';intro.style.opacity=0;loading.style.opacity=0};audio.onpause=()=>playBtn.textContent='▶';audio.onended=()=>{intro.style.opacity=1;intro.querySelector('small').textContent='THE WORLD IS STILL OPEN'};
+document.querySelector('#restart').onclick=()=>{audio.currentTime=0;if(audio.paused)playBtn.click()};
+document.querySelector('#mute').onclick=e=>{audio.muted=!audio.muted;e.target.textContent=audio.muted?'SOUND OFF':'SOUND ON'};
+seek.onclick=e=>{const r=seek.getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(audio.duration||totalDuration)};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();playBtn.click()}});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
+animate();loading.style.opacity=0;
 </script></body></html>
