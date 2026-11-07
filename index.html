@@ -107,7 +107,7 @@ for(let i=12;i<16;i++){
  }
 }
 function setPalette(i){const p=palettes[i%8];nebulaMat.uniforms.uA.value.set(p[0]);nebulaMat.uniforms.uB.value.set(p[1]);nebulaMat.uniforms.uC.value.set(p[2]);scene.fog=new THREE.FogExp2(p[0],.0007)}
-const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();let analyser=null,data=null;if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);analyser.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
+const audioCtx=(()=>{try{return new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();let analyser=null,data=null,masterGain=null;if(audioCtx){const src=audioCtx.createMediaElementSource(audio);analyser=audioCtx.createAnalyser();analyser.fftSize=256;masterGain=audioCtx.createGain();masterGain.gain.value=0;src.connect(analyser);analyser.connect(masterGain);masterGain.connect(audioCtx.destination);data=new Uint8Array(analyser.frequencyBinCount)}
 let lastSlot=-1,hasStarted=false;
 const SHOT_SECONDS=5.35;
 const TOTAL_SHOTS=Math.ceil(262.4/SHOT_SECONDS);
@@ -195,7 +195,7 @@ function animate(){
 const duration=audio.duration||262.4;bar.style.width=(t/duration*100)+'%';document.querySelector('#now').textContent=fmt(t);document.querySelector('#total').textContent=fmt(duration);
 if(!hasStarted&&t>.5){hasStarted=true;intro.style.opacity=0;loading.style.opacity=0}
 }
-playBtn.onclick=async()=>{if(audio.paused){try{if(audioCtx?.state==='suspended')await audioCtx.resume();await audio.play();intro.style.opacity=0;loading.style.opacity=0;playBtn.textContent='Ⅱ'}catch(e){loading.textContent='TAP PLAY TO BEGIN';loading.style.opacity=1}}else{audio.pause();playBtn.textContent='▶'}};
+playBtn.onclick=async()=>{if(audio.paused){try{if(audioCtx?.state==='suspended')await audioCtx.resume();if(masterGain){const now=audioCtx.currentTime;masterGain.gain.cancelScheduledValues(now);masterGain.gain.setValueAtTime(audio.currentTime<.1?0:masterGain.gain.value,now);masterGain.gain.linearRampToValueAtTime(1,now+1.7)}await audio.play();intro.style.opacity=0;loading.style.opacity=0;playBtn.textContent='Ⅱ'}catch(e){loading.textContent='TAP PLAY TO BEGIN';loading.style.opacity=1}}else{audio.pause();playBtn.textContent='▶'}};
 audio.onplay=()=>{playBtn.textContent='Ⅱ';intro.style.opacity=0;loading.style.opacity=0;revealControls()};audio.onpause=()=>{playBtn.textContent='▶';document.querySelector('.controls').classList.remove('is-hidden');clearTimeout(uiIdleTimer)};audio.onended=()=>{intro.style.opacity=1;intro.querySelector('small').textContent='THE UNIVERSE HAS NO EDGE'};
 document.querySelector('#restart').onclick=()=>{audio.currentTime=0;if(audio.paused)playBtn.click()};
 document.querySelector('#mute').onclick=e=>{audio.muted=!audio.muted;e.target.textContent=audio.muted?'SOUND OFF':'SOUND ON'};
