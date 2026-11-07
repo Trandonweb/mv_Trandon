@@ -172,6 +172,7 @@ function animate(){
  const u=p,phase=t*.18,mode=slot%10;
  // Distinct manoeuvres: spiral, dive, crane, orbit, roll, fly-by and pull-away.
  let x=Math.sin(t*.025)*4,y=Math.cos(t*.021)*2-2,roll=0,lookX=0,lookY=0,zOffset=0;
+ const baseX=x,baseY=y;
  const arc=Math.sin(Math.PI*u),turn=Math.sin(2*Math.PI*u),loop=Math.cos(2*Math.PI*u)-1;
  if(mode===0){x+=arc*13;y+=Math.sin(2*Math.PI*u)*4;zOffset=-18*arc;lookX=5*turn}
  if(mode===1){x+=turn*15;y+=loop*7;zOffset=-9*arc;roll=.12*turn}
@@ -183,13 +184,18 @@ function animate(){
  if(mode===7){x+=Math.sin(4*Math.PI*u)*11;y+=arc*18;zOffset=22*arc;roll=.22*turn}
  if(mode===8){x+=turn*18;y+=loop*12;zOffset=-42*arc;lookY=12*turn}
  if(mode===9){x+=Math.sin(3*Math.PI*u)*12;y+=Math.sin(2*Math.PI*u)*14;zOffset=14*arc;roll=-.3*turn;lookX=-12*turn}
+ // Fade each manoeuvre in and out before the next one begins. This keeps
+ // position, direction and roll continuous across every 5.35-second boundary.
+ const edge=Math.min(1,u/.24,(1-u)/.24);
+ const blend=easeInOut(Math.max(0,edge));
+ x=baseX+(x-baseX)*blend;
+ y=baseY+(y-baseY)*blend;
+ zOffset*=blend;roll*=blend;lookX*=blend;lookY*=blend;
  const z=24-travel+zOffset;
- const now=performance.now(),frameDelta=Math.min((now-lastFrameTime)/1000,.05);lastFrameTime=now;
- const smooth=1-Math.exp(-frameDelta*7);
- camera.position.x+=(x-camera.position.x)*smooth;
- camera.position.y+=(y-camera.position.y)*smooth;
- camera.position.z+=(z-camera.position.z)*smooth;
- camera.lookAt(camera.position.x*.58+lookX+Math.sin(phase*.5)*2,camera.position.y*.55+lookY,z-74);
+ // The path itself is already eased and continuous; do not chase it with a
+ // lagging spring, which makes the camera appear to jump when a shot changes.
+ camera.position.set(x,y,z);
+ camera.lookAt(x*.58+lookX+Math.sin(phase*.5)*2,y*.55+lookY,z-74);
  camera.rotateZ(roll);
  const pulse=1+beat*.025;
  g.scale.setScalar(idx===10?pulse+beat*.08:pulse);
