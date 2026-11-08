@@ -17,6 +17,7 @@ function reveal(){const c=document.querySelector('.controls');c.classList.remove
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.25));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.22;document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color('#241720');scene.fog=new THREE.FogExp2('#241720',.0025);
 const camera=new THREE.PerspectiveCamera(57,innerWidth/innerHeight,.1,2200);camera.position.set(0,13,28);
+const R=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const starPositions=new Float32Array(520*3);for(let i=0;i<520;i++){starPositions[i*3]=R(-520,520);starPositions[i*3+1]=R(-300,300);starPositions[i*3+2]=-R(360,540)}const starGeo=new THREE.BufferGeometry();starGeo.setAttribute('position',new THREE.BufferAttribute(starPositions,3));const starMat=new THREE.PointsMaterial({color:'#f4edff',size:2.1,sizeAttenuation:false,transparent:true,opacity:0,depthWrite:false,depthTest:false,fog:false});const starField=new THREE.Points(starGeo,starMat);scene.add(starField);
 
 scene.add(new THREE.HemisphereLight(0xffdfbd,0x211622,1.55));const sun=new THREE.DirectionalLight(0xffc58c,2.5);sun.position.set(-65,100,-100);scene.add(sun);const fill=new THREE.PointLight(0xffa45f,180,360);scene.add(fill);
@@ -27,7 +28,7 @@ const fogStops=['#a94743','#c45b38','#b78b4b','#754b83','#344b83','#18264f','#08
 const sunStops=['#ffb15c','#ff9a50','#ffe08a','#d69bd0','#8ca9f0','#526bb2','#20294e'].map(v=>new THREE.Color(v));
 const glowStops=['#ff684d','#ff8a3d','#ffd05a','#bd70c5','#638be0','#354eaa','#182044'].map(v=>new THREE.Color(v));
 function sampleStops(stops,x,out){const q=clamp(x,0,1)*(stops.length-1),i=Math.min(stops.length-2,Math.floor(q));return out.copy(stops[i]).lerp(stops[i+1],q-i)}
-const R=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
 const mat=(color,rough=.78,metalness=.18,emissive='#000000',intensity=.1)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness,emissive,emissiveIntensity:intensity});
 function add(g,geo,m,x=0,y=0,z=0){const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);g.add(o);return o}
 function gear(g,x,y,z,r,depth,color,phase=0){const group=new THREE.Group();group.position.set(x,y,z);group.rotation.z=phase;g.add(group);const metal=mat(color,.32,.82,'#4a2410',.18),core=add(group,new THREE.CylinderGeometry(r*.72,r*.72,depth,48),metal);core.rotation.x=Math.PI/2;const teeth=new THREE.InstancedMesh(new THREE.BoxGeometry(r*.22,depth,r*.28),metal,16),o=new THREE.Object3D();for(let i=0;i<16;i++){const a=i*Math.PI/8;o.position.set(Math.cos(a)*r,Math.sin(a)*r,0);o.rotation.z=a;o.updateMatrix();teeth.setMatrixAt(i,o.matrix)}group.add(teeth);const ring=add(group,new THREE.TorusGeometry(r*.55,Math.max(.12,r*.035),8,48),mat('#f0c18a',.26,.88,'#d47b3b',.2));ring.position.z=depth*.56;for(let i=0;i<8;i++){const a=i*Math.PI/4;add(group,new THREE.SphereGeometry(.09*r,8,6),mat('#ffe1ae',.3,.8),Math.cos(a)*r*.55,Math.sin(a)*r*.55,depth*.6)}return group}
